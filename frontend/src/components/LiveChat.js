@@ -37,6 +37,7 @@ import {
   Pending,
   Assignment,
   CheckCircle,
+  Check,
   FilterList,
   AttachFile,
   HeadsetMic,
@@ -188,6 +189,7 @@ const LiveChat = () => {
   const [socket, setSocket] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [copiedAddr, setCopiedAddr] = useState(null);
   const fileInputRef = useRef(null);
 
   const [tickets, setTickets] = useState([]);
@@ -730,35 +732,63 @@ const LiveChat = () => {
                                       ))}
                                     </Box>
                                   )}
-                                  <Typography variant="body2" sx={{ wordBreak: 'break-word', overflowWrap: 'anywhere', whiteSpace: 'pre-line' }}>
-                                    {message.message}
-                                  </Typography>
-                                  {message.message && (message.message.includes('Wallet Address:') || message.message.includes('Deposit Address:')) && (
-                                    <Box sx={{ mt: 1, pt: 1, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                      <Typography variant="caption" sx={{ color: '#00E5FF', fontWeight: 600 }}>
-                                        Copy Wallet Address
-                                      </Typography>
-                                      <Tooltip title="Copy Address">
-                                        <IconButton
-                                          size="small"
-                                          onClick={() => {
-                                            const lines = message.message.split('\n');
-                                            const addrIdx = lines.findIndex(l => l.includes('Wallet Address:') || l.includes('Deposit Address:'));
-                                            if (addrIdx !== -1 && lines[addrIdx + 1]) {
-                                              const addr = lines[addrIdx + 1].trim();
-                                              navigator.clipboard.writeText(addr);
-                                              toast.success('Wallet address copied to clipboard!');
-                                            } else {
-                                              navigator.clipboard.writeText(message.message);
-                                              toast.success('Copied!');
-                                            }
-                                          }}
-                                          sx={{ color: '#00E5FF', bgcolor: 'rgba(0, 229, 255, 0.1)', '&:hover': { bgcolor: 'rgba(0, 229, 255, 0.25)' } }}
-                                        >
-                                          <ContentCopy fontSize="small" />
-                                        </IconButton>
-                                      </Tooltip>
+                                  {message.message && (message.message.includes('Wallet Address:') || message.message.includes('Deposit Address:')) ? (
+                                    <Box sx={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                                      {message.message.split('\n').map((line, lineIdx, arr) => {
+                                        const isAddrLabel = line.includes('Wallet Address:') || line.includes('Deposit Address:');
+                                        const prevLine = arr[lineIdx - 1] || '';
+                                        const isAddrValue = prevLine.includes('Wallet Address:') || prevLine.includes('Deposit Address:');
+                                        if (isAddrLabel) {
+                                          return (
+                                            <Typography key={lineIdx} variant="body2" sx={{ whiteSpace: 'pre-line', fontWeight: 600, color: '#CBD5E1' }}>
+                                              {line}
+                                            </Typography>
+                                          );
+                                        }
+                                        if (isAddrValue) {
+                                          const addr = line.trim();
+                                          return (
+                                            <Box key={lineIdx} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25, mb: 0.5, p: '6px 10px', borderRadius: 2, bgcolor: 'rgba(0,229,255,0.07)', border: '1px solid rgba(0,229,255,0.18)' }}>
+                                              <Typography variant="body2" sx={{ flex: 1, wordBreak: 'break-all', fontSize: '0.78rem', color: '#E2E8F0', fontFamily: 'monospace' }}>
+                                                {addr}
+                                              </Typography>
+                                              <Tooltip title={copiedAddr === addr ? 'Copied!' : 'Copy Address'}>
+                                                <IconButton
+                                                  size="small"
+                                                  onClick={() => {
+                                                    navigator.clipboard.writeText(addr);
+                                                    setCopiedAddr(addr);
+                                                    toast.success('Wallet address copied!');
+                                                    setTimeout(() => setCopiedAddr(null), 2000);
+                                                  }}
+                                                  sx={{
+                                                    color: copiedAddr === addr ? '#00C853' : '#00E5FF',
+                                                    p: '4px',
+                                                    flexShrink: 0,
+                                                    bgcolor: copiedAddr === addr ? 'rgba(0,200,83,0.15)' : 'rgba(0,229,255,0.12)',
+                                                    transition: 'all 0.25s ease',
+                                                    '&:hover': { bgcolor: copiedAddr === addr ? 'rgba(0,200,83,0.28)' : 'rgba(0,229,255,0.28)' }
+                                                  }}
+                                                >
+                                                  {copiedAddr === addr
+                                                    ? <Check sx={{ fontSize: 14 }} />
+                                                    : <ContentCopy sx={{ fontSize: 14 }} />}
+                                                </IconButton>
+                                              </Tooltip>
+                                            </Box>
+                                          );
+                                        }
+                                        return (
+                                          <Typography key={lineIdx} variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+                                            {line}
+                                          </Typography>
+                                        );
+                                      })}
                                     </Box>
+                                  ) : (
+                                    <Typography variant="body2" sx={{ wordBreak: 'break-word', overflowWrap: 'anywhere', whiteSpace: 'pre-line' }}>
+                                      {message.message}
+                                    </Typography>
                                   )}
                                 </Box>
                                 )}

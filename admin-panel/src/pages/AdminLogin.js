@@ -115,29 +115,9 @@ const AdminLogin = () => {
             <Box sx={{ position: 'relative', zIndex: 1 }}>
               {/* Header */}
               <Box sx={{ textAlign: 'center', mb: 4 }}>
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.5, type: 'spring' }}
-                >
-                  <Box
-                    sx={{
-                      width: 80,
-                      height: 80,
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      margin: '0 auto 16px',
-                      boxShadow: '0 8px 32px rgba(0, 211, 149, 0.3)',
-                    }}
-                  >
-                    <Security sx={{ fontSize: 40, color: 'white' }} />
-                  </Box>
-                </motion.div>
+
                 
-                <Box component="img" src="/logo.png" alt="Cryptosimia Logo" sx={{ height: 60, mb: 1 }} />
+                <Box component="img" src="/logo.png" alt="Cryptosimia Logo" sx={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover', mb: 2, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }} />
                 <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#8b5cf6', mb: 1 }}>
                   Admin Portal
                 </Typography>

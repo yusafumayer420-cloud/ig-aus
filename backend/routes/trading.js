@@ -20,11 +20,22 @@ const DELIVERY_SLOTS = {
 // Settle a delivery trade after timer expires
 async function settleDeliveryTrade(tradeId, io) {
   try {
-    const trade = await Trade.findById(tradeId).populate('userId');
-    if (!trade || trade.status !== 'pending' || trade.tradeMode !== 'delivery') return;
+    // Atomic claim: atomically flip status from 'pending' → 'settling'
+    // Only ONE caller will succeed; all others get null and bail out immediately.
+    const trade = await Trade.findOneAndUpdate(
+      { _id: tradeId, status: 'pending', tradeMode: 'delivery' },
+      { $set: { status: 'settling' } },
+      { new: true }
+    ).populate('userId');
+
+    if (!trade) return; // Already settled or claimed by another call
 
     const user = await User.findById(trade.userId._id || trade.userId);
-    if (!user) return;
+    if (!user) {
+      // Revert status so it can be retried
+      await Trade.findByIdAndUpdate(tradeId, { $set: { status: 'pending' } });
+      return;
+    }
 
     const settings = await SystemSettings.findOne();
     // Global override and User override

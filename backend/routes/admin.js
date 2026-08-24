@@ -6,6 +6,7 @@ const SupportTicket = require('../models/SupportTicket');
 const ChatMessage = require('../models/Chat');
 const WalletTransaction = require('../models/WalletTransaction');
 const SystemSettings = require('../models/SystemSettings');
+const QuickReply = require('../models/QuickReply');
 const mongoose = require('mongoose');
 const router = express.Router();
 
@@ -498,18 +499,18 @@ router.get('/stats', protect, adminAuth, async (req, res) => {
       }
     ]);
 
-    // Get recent activities (last 10 combined from users, trades, transactions)
+    // Get recent activities (last 30 combined from users, trades, transactions)
     const [lastUsers, lastTrades, lastTransactions] = await Promise.all([
-      User.find().sort({ createdAt: -1 }).limit(5).select('fullName createdAt email'),
-      Trade.find().sort({ createdAt: -1 }).limit(5).populate('userId', 'fullName'),
-      WalletTransaction.find().sort({ createdAt: -1 }).limit(5).populate('userId', 'fullName')
+      User.find().sort({ createdAt: -1 }).limit(10).select('fullName createdAt email'),
+      Trade.find().sort({ createdAt: -1 }).limit(10).populate('userId', 'fullName'),
+      WalletTransaction.find().sort({ createdAt: -1 }).limit(10).populate('userId', 'fullName')
     ]);
 
     const recentActivities = [
       ...lastUsers.map(u => ({ id: u._id, user: u.fullName || u.email, action: 'Registration', details: 'New User', status: 'success', time: u.createdAt })),
       ...lastTrades.map(t => ({ id: t._id, user: t.userId?.fullName || 'User', action: `${t.pair} ${t.type}`, details: `${t.amount} @ ${t.price}`, status: t.status, time: t.createdAt })),
       ...lastTransactions.map(tx => ({ id: tx._id, user: tx.userId?.fullName || 'User', action: tx.type, details: `${tx.amount} ${tx.currency}`, status: tx.status, time: tx.createdAt }))
-    ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+    ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 30);
 
     // Get quick stats
     const avgTradeSize = totalTrades > 0 ? totalVolume / totalTrades : 0;
@@ -850,5 +851,70 @@ router.put('/users/:id/delivery-trade', protect, adminAuth, async (req, res) => 
 
 // Also support updating deliveryTradeEnabled via PUT /api/admin/users/:id
 // (already handled in the general update user route above via req.body)
+
+// ==============================
+// Quick Replies CRUD
+// ==============================
+
+// Get all quick replies
+router.get('/quick-replies', protect, adminAuth, async (req, res) => {
+  try {
+    const replies = await QuickReply.find().sort({ usageCount: -1, createdAt: -1 });
+    res.json(replies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Create quick reply
+router.post('/quick-replies', protect, adminAuth, async (req, res) => {
+  try {
+    const { title, message, shortcut, category } = req.body;
+    if (!title || !message) {
+      return res.status(400).json({ message: 'Title and message are required' });
+    }
+    const reply = await QuickReply.create({ title, message, shortcut, category });
+    res.status(201).json(reply);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update quick reply
+router.put('/quick-replies/:id', protect, adminAuth, async (req, res) => {
+  try {
+    const { title, message, shortcut, category } = req.body;
+    const reply = await QuickReply.findByIdAndUpdate(
+      req.params.id,
+      { title, message, shortcut, category },
+      { new: true }
+    );
+    if (!reply) return res.status(404).json({ message: 'Quick reply not found' });
+    res.json(reply);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete quick reply
+router.delete('/quick-replies/:id', protect, adminAuth, async (req, res) => {
+  try {
+    const reply = await QuickReply.findByIdAndDelete(req.params.id);
+    if (!reply) return res.status(404).json({ message: 'Quick reply not found' });
+    res.json({ message: 'Quick reply deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Increment usage count
+router.post('/quick-replies/:id/use', protect, adminAuth, async (req, res) => {
+  try {
+    await QuickReply.findByIdAndUpdate(req.params.id, { $inc: { usageCount: 1 } });
+    res.json({ message: 'Usage recorded' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 module.exports = router;

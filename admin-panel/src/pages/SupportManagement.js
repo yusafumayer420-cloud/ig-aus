@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Box,
   Card,
@@ -33,6 +33,8 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  Popper,
+  Fade,
 } from "@mui/material";
 import {
   Search,
@@ -88,7 +90,38 @@ const SupportManagement = () => {
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [editingMessageContent, setEditingMessageContent] = useState("");
   const fileInputRef = React.useRef(null);
+  const replyInputRef = useRef(null);
   const [unreadCounts, setUnreadCounts] = useState({}); // { room: count }
+
+  // Quick Replies
+  const [quickReplies, setQuickReplies] = useState([]);
+  const [qrAnchor, setQrAnchor] = useState(null);
+  const [qrFilter, setQrFilter] = useState('');
+  const [qrOpen, setQrOpen] = useState(false);
+
+  const fetchQuickReplies = useCallback(async () => {
+    try {
+      const res = await api.get('/api/admin/quick-replies');
+      setQuickReplies(res.data);
+    } catch {}
+  }, []);
+
+  useEffect(() => { fetchQuickReplies(); }, [fetchQuickReplies]);
+
+  const filteredQR = quickReplies.filter(r => {
+    if (!qrFilter) return true;
+    const q = qrFilter.toLowerCase();
+    return r.title.toLowerCase().includes(q) || (r.shortcut || '').toLowerCase().includes(q) || r.message.toLowerCase().includes(q);
+  });
+
+  const handleSelectQuickReply = async (reply) => {
+    setReplyMessage(reply.message);
+    setQrOpen(false);
+    setQrFilter('');
+    // Increment usage count in background
+    try { await api.post(`/api/admin/quick-replies/${reply._id}/use`); } catch {}
+    setTimeout(() => replyInputRef.current?.focus(), 100);
+  };
   const [stats, setStats] = useState({
     openTickets: 0,
     inProgressTickets: 0,
@@ -1416,13 +1449,28 @@ const SupportManagement = () => {
                     </IconButton>
                     <TextField
                       fullWidth
-                      placeholder="Type your reply..."
+                      placeholder="Type your reply... (type / for quick replies)"
                       value={replyMessage}
-                      onChange={(e) => setReplyMessage(e.target.value)}
+                      inputRef={replyInputRef}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setReplyMessage(val);
+                        if (val.startsWith('/')) {
+                          setQrFilter(val.slice(1));
+                          setQrAnchor(replyInputRef.current);
+                          setQrOpen(true);
+                        } else {
+                          setQrOpen(false);
+                          setQrFilter('');
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') { setQrOpen(false); setQrFilter(''); }
+                      }}
                       onKeyPress={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();
-                          handleSendMessage();
+                          if (!qrOpen) handleSendMessage();
                         }
                       }}
                       multiline
@@ -1449,7 +1497,47 @@ const SupportManagement = () => {
                     <Typography variant="caption" color="text.secondary">
                       Press Enter to send, Shift+Enter for new line
                     </Typography>
+                    <Typography variant="caption" sx={{ color: '#8b5cf6', cursor: 'pointer' }} onClick={() => { setQrAnchor(replyInputRef.current); setQrOpen(true); setQrFilter(''); }}>
+                      ⚡ Quick Replies
+                    </Typography>
                   </Box>
+
+                  {/* Quick Reply Picker Popper */}
+                  <Popper open={qrOpen && filteredQR.length > 0} anchorEl={qrAnchor} placement="top-start" transition style={{ zIndex: 9999, width: qrAnchor?.offsetWidth || 400 }}>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={150}>
+                        <Paper elevation={8} sx={{ mb: 1, maxHeight: 280, overflowY: 'auto', border: '1px solid rgba(139,92,246,0.35)', bgcolor: '#1a1f35' }}>
+                          <Box sx={{ px: 1.5, py: 1, borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Typography variant="caption" sx={{ color: '#a78bfa', fontWeight: 700 }}>⚡ Quick Replies {qrFilter && `· /${qrFilter}`}</Typography>
+                            <Typography variant="caption" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={() => { setQrOpen(false); setQrFilter(''); setReplyMessage(''); }}>✕ close</Typography>
+                          </Box>
+                          {filteredQR.map((reply) => (
+                            <Box
+                              key={reply._id}
+                              onClick={() => handleSelectQuickReply(reply)}
+                              sx={{
+                                px: 2, py: 1.2, cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.04)',
+                                '&:hover': { bgcolor: 'rgba(139,92,246,0.15)' },
+                                '&:last-child': { borderBottom: 'none' },
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.3 }}>
+                                <Typography variant="body2" sx={{ fontWeight: 700, color: '#e2e8f0' }}>{reply.title}</Typography>
+                                {reply.shortcut && <Chip label={`/${reply.shortcut}`} size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: 'rgba(139,92,246,0.25)', color: '#a78bfa' }} />}
+                                <Chip label={reply.category || 'general'} size="small" sx={{ height: 18, fontSize: '0.65rem', ml: 'auto', textTransform: 'capitalize' }} />
+                              </Box>
+                              <Typography variant="caption" color="text.secondary" sx={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {reply.message}
+                              </Typography>
+                            </Box>
+                          ))}
+                          {filteredQR.length === 0 && (
+                            <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>No matching replies found</Typography>
+                          )}
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
                 </Box>
               </Box>
             </DialogContent>

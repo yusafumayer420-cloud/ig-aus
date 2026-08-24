@@ -35,6 +35,7 @@ const Sparkline = ({ data, color = '#00E5FF', width = 100, height = 30, fill = t
         <path
           d={areaPath}
           fill={`url(#${id})`}
+          style={{ transition: 'd 3s ease-in-out' }}
         />
       )}
       <polyline
@@ -44,6 +45,7 @@ const Sparkline = ({ data, color = '#00E5FF', width = 100, height = 30, fill = t
         strokeLinecap="round"
         strokeLinejoin="round"
         points={linePoints}
+        style={{ transition: 'points 3s ease-in-out' }}
       />
     </svg>
   );

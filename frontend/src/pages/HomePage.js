@@ -132,6 +132,15 @@ const HomePage = ({ marketData }) => {
   const [loadingNews, setLoadingNews] = useState(true);
   const [marketTab, setMarketTab] = useState(0);
 
+  const [sparkOffset, setSparkOffset] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSparkOffset((prev) => prev + 1);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   /* ---- Slides ---- */
   const [slideIndex, setSlideIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
@@ -494,7 +503,7 @@ const HomePage = ({ marketData }) => {
                     ${Math.floor(balance).toLocaleString('en-US')}
                   </Typography>
                   <Box sx={{ mt: 1 }}>
-                    <Sparkline data={generateSparkData('portfolio', balance || 100)} color="#00E5FF" width={120} height={24} />
+                    <Sparkline data={generateSparkData('portfolio', balance || 100, 0.02, 40).slice(sparkOffset % 20, (sparkOffset % 20) + 20)} color="#00E5FF" width={120} height={24} />
                   </Box>
                 </CardContent>
               </Card>
@@ -540,7 +549,14 @@ const HomePage = ({ marketData }) => {
                   >
                     {dailyPnl >= 0 ? '+' : '-'}${Math.abs(dailyPnl).toFixed(2)}
                   </Typography>
-
+                  <Box sx={{ mt: 1 }}>
+                    <Sparkline 
+                      data={generateSparkData('pnl', Math.abs(dailyPnl) || 10, 0.05, 40).slice(sparkOffset % 20, (sparkOffset % 20) + 20)} 
+                      color={dailyPnl >= 0 ? '#00C853' : '#FF5252'} 
+                      width={120} 
+                      height={24} 
+                    />
+                  </Box>
                 </CardContent>
               </Card>
 

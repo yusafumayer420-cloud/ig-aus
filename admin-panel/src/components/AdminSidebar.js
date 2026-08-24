@@ -32,6 +32,7 @@ import {
   Receipt,
   History,
   AdminPanelSettings,
+  BoltOutlined,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -73,6 +74,7 @@ const AdminSidebar = ({ open, onClose, isMobile }) => {
     { text: 'Deposit Addresses', icon: <Receipt />, path: '/deposit-addresses' },
     { text: 'Notifications', icon: <Notifications />, path: '/notifications' },
     { text: 'Support Center', icon: <SupportAgent />, path: '/support' },
+    { text: 'Quick Replies', icon: <BoltOutlined />, path: '/quick-replies' },
     { text: 'System Settings', icon: <Settings />, path: '/settings' },
   ];
 
