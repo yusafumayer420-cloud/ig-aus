@@ -91,6 +91,16 @@ async function fetchInitialPrices() {
 }
 
 function startPriceFeed(io) {
+  let throttleTimer = null;
+  function broadcastUpdate() {
+    if (!throttleTimer) {
+      throttleTimer = setTimeout(() => {
+        io.emit('priceUpdate', latestPrices);
+        throttleTimer = null;
+      }, 2500);
+    }
+  }
+
   // Coinbase uses a single endpoint for all product ticker updates
   const url = `wss://ws-feed.exchange.coinbase.com`;
 
@@ -135,7 +145,7 @@ function startPriceFeed(io) {
             };
             
             // Broadcast update
-            io.emit('priceUpdate', latestPrices);
+            broadcastUpdate();
           }
         }
       } catch (error) {
@@ -198,7 +208,7 @@ function startPriceFeed(io) {
               change24h: latestPrices[priceIndex].change24h, // keep existing change if present
               volume: parseFloat(data.data.amount).toFixed(2)
             };
-            io.emit('priceUpdate', latestPrices);
+            broadcastUpdate();
           }
         } catch (e) {
           console.error('Error processing Bitstamp message:', e.message);

@@ -213,7 +213,6 @@ const MarketPage = ({ marketData }) => {
     { pair: 'GALA/USDT', price: 0.045, change24h: -3.15, volume: 165436789, marketCap: 1600000000 },
     { pair: 'QNT/USDT', price: 115.45, change24h: 0.85, volume: 45123687, marketCap: 1400000000 },
     { pair: 'SNX/USDT', price: 3.25, change24h: -1.45, volume: 54123687, marketCap: 1100000000 },
-    { pair: 'EGLD/USDT', price: 45.67, change24h: 2.15, volume: 85412368, marketCap: 1200000000 },
     { pair: 'ASTR/USDT', price: 0.12, change24h: -0.45, volume: 35412368, marketCap: 650000000 },
     { pair: 'MINA/USDT', price: 1.15, change24h: 1.85, volume: 65412368, marketCap: 1200000000 },
     { pair: 'FXS/USDT', price: 4.85, change24h: -2.15, volume: 25412368, marketCap: 380000000 },
@@ -579,10 +578,10 @@ const MarketPage = ({ marketData }) => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: '35%', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Pair</TableCell>
+            <TableCell sx={{ pl: { xs: 1, sm: 2 }, width: '35%', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Pair</TableCell>
             <TableCell align="right" sx={{ fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Price</TableCell>
             <TableCell align="right" sx={{ fontWeight: 'bold', display: { xs: 'none', sm: 'table-cell' }, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Last 24h</TableCell>
-            <TableCell align="right" sx={{ fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>24h %</TableCell>
+            <TableCell align="right" sx={{ pr: { xs: 1, sm: 2 }, fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>24h %</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -596,6 +595,7 @@ const MarketPage = ({ marketData }) => {
               onClick={() => activeTab === 0 && handleTradeClick(item.pair)}
             >
               <TableCell sx={{ 
+                pl: { xs: 1, sm: 2 },
                 borderBottom: '1px solid rgba(255,255,255,0.04)',
                 transition: 'all 0.25s',
                 '&:hover': { bgcolor: 'transparent' }
@@ -630,7 +630,7 @@ const MarketPage = ({ marketData }) => {
                   height={25} 
                 />
               </TableCell>
-              <TableCell align="right" sx={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+              <TableCell align="right" sx={{ pr: { xs: 1, sm: 2 }, borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                 <Chip
                   label={`${item.change24h >= 0 ? '+' : ''}${item.change24h}%`}
                   size="small"

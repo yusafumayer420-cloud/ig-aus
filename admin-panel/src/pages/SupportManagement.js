@@ -183,7 +183,23 @@ const SupportManagement = () => {
       }
       return 0;
     });
-    setFilteredTickets(filtered);
+
+    // Deduplicate by user ID so each user only appears once (with their latest chat)
+    const uniqueTickets = [];
+    const seenUsers = new Set();
+    for (const ticket of filtered) {
+      const userId = typeof ticket.userId === 'object' ? (ticket.userId?._id || ticket.userId?.id) : ticket.userId;
+      if (userId) {
+        if (!seenUsers.has(userId)) {
+          seenUsers.add(userId);
+          uniqueTickets.push(ticket);
+        }
+      } else {
+        uniqueTickets.push(ticket);
+      }
+    }
+
+    setFilteredTickets(uniqueTickets);
   }, [tickets, searchTerm, filters, activeTab]);
 
   useEffect(() => {

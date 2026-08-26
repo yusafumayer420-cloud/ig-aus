@@ -226,6 +226,34 @@ router.post('/verify-otp', async (req, res) => {
         relatedId: user._id
       }).catch(err => console.error('Notification error:', err));
 
+      // Send Welcome Email
+      try {
+        const supportEmail = process.env.SUPPORT_EMAIL || 'support@cryptosimia.com';
+        const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
+        
+        await sendEmail({
+          email: user.email,
+          subject: 'Welcome to CryptoSimia! 👋',
+          message: `Welcome to CryptoSimia!`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+              <p>Dear ${firstName},</p>
+              <p>Welcome to <strong>CryptoSimia!</strong> 👋</p>
+              <p>Thank you for creating your account with us. We’re excited to have you as part of the CryptoSimia community.</p>
+              <p>Your account has been successfully created, and you can now log in to access your CryptoSimia account and explore our platform.</p>
+              <p>If you have any questions or need assistance, our support team is always here to help.</p>
+              <p><strong>Welcome aboard, and thank you for choosing CryptoSimia!</strong></p>
+              <br>
+              <p>Best regards,<br>
+              <strong>CryptoSimia Support Team</strong><br>
+              Support: ${supportEmail}</p>
+            </div>
+          `
+        });
+      } catch (emailErr) {
+        console.error('Failed to send welcome email:', emailErr);
+      }
+
       const token = jwt.sign(
         { id: user._id, role: user.role },
         process.env.JWT_SECRET || 'your-secret-key',
@@ -271,6 +299,34 @@ router.post('/verify-otp', async (req, res) => {
       type: 'user',
       relatedId: user._id
     }).catch(err => console.error('Notification error:', err));
+
+    // Send Welcome Email
+    try {
+      const supportEmail = process.env.SUPPORT_EMAIL || 'support@cryptosimia.com';
+      const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
+      
+      await sendEmail({
+        email: user.email,
+        subject: 'Welcome to CryptoSimia! 👋',
+        message: `Welcome to CryptoSimia!`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+            <p>Dear ${firstName},</p>
+            <p>Welcome to <strong>CryptoSimia!</strong> 👋</p>
+            <p>Thank you for creating your account with us. We’re excited to have you as part of the CryptoSimia community.</p>
+            <p>Your account has been successfully created, and you can now log in to access your CryptoSimia account and explore our platform.</p>
+            <p>If you have any questions or need assistance, our support team is always here to help.</p>
+            <p><strong>Welcome aboard, and thank you for choosing CryptoSimia!</strong></p>
+            <br>
+            <p>Best regards,<br>
+            <strong>CryptoSimia Support Team</strong><br>
+            Support: ${supportEmail}</p>
+          </div>
+        `
+      });
+    } catch (emailErr) {
+      console.error('Failed to send welcome email:', emailErr);
+    }
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
