@@ -55,14 +55,14 @@ router.post('/register', async (req, res) => {
         message: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #00D395; text-align: center;">Welcome to Cryptosimia</h2>
+            <h2 style="color: #00D395; text-align: center;">Welcome to IG AUS</h2>
             <p>Thank you for signing up! Please use the OTP below to verify your email address:</p>
             <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
               ${otp}
             </div>
             <p>This OTP will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 Cryptosimia. All rights reserved.</p>
+            <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
           </div>
         `
       });
@@ -120,14 +120,14 @@ router.post('/login', async (req, res) => {
           message: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-              <h2 style="color: #00D395; text-align: center;">Cryptosimia Verification</h2>
+              <h2 style="color: #00D395; text-align: center;">IG AUS Verification</h2>
               <p>Your account is not yet verified. Please use the OTP below to verify your email address:</p>
               <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
                 ${otp}
               </div>
               <p>This OTP will expire in <strong>10 minutes</strong>.</p>
               <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-              <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 Cryptosimia. All rights reserved.</p>
+              <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
             </div>
           `
         });
@@ -228,24 +228,24 @@ router.post('/verify-otp', async (req, res) => {
 
       // Send Welcome Email
       try {
-        const supportEmail = process.env.SUPPORT_EMAIL || 'support@cryptosimia.com';
+        const supportEmail = process.env.SUPPORT_EMAIL || 'support@IG AUS.com';
         const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
         
         await sendEmail({
           email: user.email,
-          subject: 'Welcome to CryptoSimia! 👋',
-          message: `Welcome to CryptoSimia!`,
+          subject: 'Welcome to IG AUS! 👋',
+          message: `Welcome to IG AUS!`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
               <p>Dear ${firstName},</p>
-              <p>Welcome to <strong>CryptoSimia!</strong> 👋</p>
-              <p>Thank you for creating your account with us. We’re excited to have you as part of the CryptoSimia community.</p>
-              <p>Your account has been successfully created, and you can now log in to access your CryptoSimia account and explore our platform.</p>
+              <p>Welcome to <strong>IG AUS!</strong> 👋</p>
+              <p>Thank you for creating your account with us. We’re excited to have you as part of the IG AUS community.</p>
+              <p>Your account has been successfully created, and you can now log in to access your IG AUS account and explore our platform.</p>
               <p>If you have any questions or need assistance, our support team is always here to help.</p>
-              <p><strong>Welcome aboard, and thank you for choosing CryptoSimia!</strong></p>
+              <p><strong>Welcome aboard, and thank you for choosing IG AUS!</strong></p>
               <br>
               <p>Best regards,<br>
-              <strong>CryptoSimia Support Team</strong><br>
+              <strong>IG AUS Support Team</strong><br>
               Support: ${supportEmail}</p>
             </div>
           `
@@ -302,24 +302,24 @@ router.post('/verify-otp', async (req, res) => {
 
     // Send Welcome Email
     try {
-      const supportEmail = process.env.SUPPORT_EMAIL || 'support@cryptosimia.com';
+      const supportEmail = process.env.SUPPORT_EMAIL || 'support@IG AUS.com';
       const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
       
       await sendEmail({
         email: user.email,
-        subject: 'Welcome to CryptoSimia! 👋',
-        message: `Welcome to CryptoSimia!`,
+        subject: 'Welcome to IG AUS! 👋',
+        message: `Welcome to IG AUS!`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
             <p>Dear ${firstName},</p>
-            <p>Welcome to <strong>CryptoSimia!</strong> 👋</p>
-            <p>Thank you for creating your account with us. We’re excited to have you as part of the CryptoSimia community.</p>
-            <p>Your account has been successfully created, and you can now log in to access your CryptoSimia account and explore our platform.</p>
+            <p>Welcome to <strong>IG AUS!</strong> 👋</p>
+            <p>Thank you for creating your account with us. We’re excited to have you as part of the IG AUS community.</p>
+            <p>Your account has been successfully created, and you can now log in to access your IG AUS account and explore our platform.</p>
             <p>If you have any questions or need assistance, our support team is always here to help.</p>
-            <p><strong>Welcome aboard, and thank you for choosing CryptoSimia!</strong></p>
+            <p><strong>Welcome aboard, and thank you for choosing IG AUS!</strong></p>
             <br>
             <p>Best regards,<br>
-            <strong>CryptoSimia Support Team</strong><br>
+            <strong>IG AUS Support Team</strong><br>
             Support: ${supportEmail}</p>
           </div>
         `
@@ -373,14 +373,14 @@ router.post('/resend-otp', async (req, res) => {
         message: `Your new verification OTP is ${otp}. It will expire in 10 minutes.`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #00D395; text-align: center;">Cryptosimia Verification</h2>
+            <h2 style="color: #00D395; text-align: center;">IG AUS Verification</h2>
             <p>Your new verification OTP is:</p>
             <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
               ${otp}
             </div>
             <p>This OTP will expire in <strong>10 minutes</strong>.</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 Cryptosimia. All rights reserved.</p>
+            <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
           </div>
         `
       });
@@ -408,14 +408,14 @@ router.post('/resend-otp', async (req, res) => {
       message: `Your new verification OTP is ${otp}. It will expire in 10 minutes.`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h2 style="color: #00D395; text-align: center;">Cryptosimia Verification</h2>
+          <h2 style="color: #00D395; text-align: center;">IG AUS Verification</h2>
           <p>Your new verification OTP is:</p>
           <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
             ${otp}
           </div>
           <p>This OTP will expire in <strong>10 minutes</strong>.</p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 Cryptosimia. All rights reserved.</p>
+          <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
         </div>
       `
     });
@@ -443,7 +443,7 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     const frontendUrl = process.env.FRONTEND_URL || req.get('origin');
-    const resetUrl = `https://www.cryptosimia.com/reset-password/${resetToken}`;
+    const resetUrl = `https://www.IG AUS.com/reset-password/${resetToken}`;
 
     const message = `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
       Please click on the following link, or paste this into your browser to complete the process within 1 hour of receiving it:\n\n

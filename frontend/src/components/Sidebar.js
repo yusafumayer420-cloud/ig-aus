@@ -75,8 +75,8 @@ const Sidebar = ({ open, onClose }) => {
         icon: '🚀',
         style: {
           borderRadius: '10px',
-          background: '#131A2E',
-          color: '#fff',
+          background: 'rgba(18, 24, 36, 0.95)',
+          color: '#F8FAFC',
           border: '1px solid rgba(255, 255, 255, 0.1)',
         },
       });
@@ -96,33 +96,33 @@ const Sidebar = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       sx={{
-                '& .MuiDrawer-paper': {
+        '& .MuiDrawer-paper': {
           width: 280,
-          background: 'linear-gradient(160deg, #070B14 0%, #0B1220 60%, #0d1428 100%)',
-          borderRight: '1px solid rgba(0, 229, 255, 0.08)',
-          color: 'white',
-          boxShadow: '4px 0 32px rgba(0,0,0,0.5)',
+          background: 'linear-gradient(160deg, #090D16 0%, #0B0E14 60%, #121824 100%)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          color: '#F8FAFC',
+          boxShadow: '4px 0 32px rgba(0, 0, 0, 0.6)',
         },
       }}
     >
       <Box sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
-            <Box
-              component="img"
-              src="/logo.png"
-              alt="Cryptosimia Logo"
-              sx={{
-                height: 48,
-                width: 48,
-                objectFit: 'cover',
-                display: 'block',
-                borderRadius: '50%',
-                mixBlendMode: 'normal',
-                border: '2px solid rgba(0, 120, 255, 0.4)',
-                boxShadow: '0 0 12px rgba(0, 120, 255, 0.4)',
-              }}
-            />
-          <IconButton onClick={onClose} sx={{ color: 'white' }}>
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="IG AUS Logo"
+            sx={{
+              height: 48,
+              width: 48,
+              objectFit: 'cover',
+              display: 'block',
+              borderRadius: '50%',
+              mixBlendMode: 'normal',
+              border: '2px solid rgba(0, 255, 157, 0.4)',
+              boxShadow: '0 0 12px rgba(0, 255, 157, 0.3)',
+            }}
+          />
+          <IconButton onClick={onClose} sx={{ color: '#F8FAFC' }}>
             <MenuOpen />
           </IconButton>
         </Box>
@@ -140,14 +140,14 @@ const Sidebar = ({ open, onClose }) => {
                 sx={{
                   mb: 1,
                   borderRadius: 2,
-                  bgcolor: isActive(item.path) ? 'rgba(0, 229, 255, 0.1)' : 'transparent',
-                  border: isActive(item.path) ? '1px solid rgba(0, 229, 255, 0.3)' : 'none',
+                  bgcolor: isActive(item.path) ? 'rgba(0, 255, 157, 0.12)' : 'transparent',
+                  border: isActive(item.path) ? '1px solid rgba(0, 255, 157, 0.3)' : 'none',
                   '&:hover': {
-                    bgcolor: 'rgba(0, 229, 255, 0.05)',
+                    bgcolor: 'rgba(0, 255, 157, 0.06)',
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: isActive(item.path) ? '#00E5FF' : 'rgba(255,255,255,0.75)', minWidth: 40 }}>
+                <ListItemIcon sx={{ color: isActive(item.path) ? '#00FF9D' : 'rgba(248,250,252,0.75)', minWidth: 40 }}>
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText 
@@ -155,7 +155,7 @@ const Sidebar = ({ open, onClose }) => {
                   primaryTypographyProps={{
                     sx: { 
                       fontWeight: isActive(item.path) ? 'bold' : 'normal',
-                      color: isActive(item.path) ? '#00E5FF' : 'rgba(255,255,255,0.85)'
+                      color: isActive(item.path) ? '#00FF9D' : 'rgba(248,250,252,0.85)'
                     }
                   }}
                 />
@@ -163,7 +163,7 @@ const Sidebar = ({ open, onClose }) => {
             </motion.div>
           ))}
 
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', my: 2 }} />
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', my: 2 }} />
 
           {/* Trading Submenu */}
           <ListItem 
@@ -172,14 +172,14 @@ const Sidebar = ({ open, onClose }) => {
             sx={{ 
               borderRadius: 2, 
               mb: 1,
-              '&:hover': { bgcolor: 'rgba(0, 229, 255, 0.05)' }
+              '&:hover': { bgcolor: 'rgba(0, 255, 157, 0.06)' }
             }}
           >
-            <ListItemIcon sx={{ color: 'rgba(255,255,255,0.75)', minWidth: 40 }}>
+            <ListItemIcon sx={{ color: 'rgba(248,250,252,0.75)', minWidth: 40 }}>
               <TrendingUp />
             </ListItemIcon>
-            <ListItemText primary="Trading" primaryTypographyProps={{ sx: { color: 'rgba(255,255,255,0.85)' } }} />
-            {openSubmenu.trading ? <ExpandLess sx={{ color: '#00E5FF' }} /> : <ExpandMore sx={{ color: 'rgba(255,255,255,0.5)' }} />}
+            <ListItemText primary="Trading" primaryTypographyProps={{ sx: { color: 'rgba(248,250,252,0.85)' } }} />
+            {openSubmenu.trading ? <ExpandLess sx={{ color: '#00FF9D' }} /> : <ExpandMore sx={{ color: 'rgba(248,250,252,0.5)' }} />}
           </ListItem>
 
           <Collapse in={openSubmenu.trading} timeout="auto" unmountOnExit>
@@ -193,11 +193,11 @@ const Sidebar = ({ open, onClose }) => {
                     pl: 4, 
                     mb: 0.5,
                     borderRadius: 2,
-                    bgcolor: isActive(item.path) ? 'rgba(0, 229, 255, 0.1)' : 'transparent',
-                    '&:hover': { bgcolor: 'rgba(0, 229, 255, 0.05)' }
+                    bgcolor: isActive(item.path) ? 'rgba(0, 255, 157, 0.12)' : 'transparent',
+                    '&:hover': { bgcolor: 'rgba(0, 255, 157, 0.06)' }
                   }}
                 >
-                  <ListItemIcon sx={{ color: isActive(item.path) ? '#00E5FF' : 'rgba(255,255,255,0.6)', minWidth: 36 }}>
+                  <ListItemIcon sx={{ color: isActive(item.path) ? '#00FF9D' : 'rgba(248,250,252,0.6)', minWidth: 36 }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 
@@ -205,7 +205,7 @@ const Sidebar = ({ open, onClose }) => {
                     primaryTypographyProps={{
                       sx: { 
                         fontSize: '0.875rem',
-                        color: isActive(item.path) ? '#00E5FF' : 'rgba(255,255,255,0.7)'
+                        color: isActive(item.path) ? '#00FF9D' : 'rgba(248,250,252,0.7)'
                       }
                     }}
                   />
@@ -214,7 +214,7 @@ const Sidebar = ({ open, onClose }) => {
             </List>
           </Collapse>
 
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', my: 2 }} />
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', my: 2 }} />
 
           {/* Other Items */}
           {otherItems.map((item, index) => (
@@ -230,11 +230,11 @@ const Sidebar = ({ open, onClose }) => {
                   mb: 1,
                   borderRadius: 2,
                   '&:hover': {
-                    bgcolor: 'rgba(0, 229, 255, 0.05)',
+                    bgcolor: 'rgba(0, 255, 157, 0.06)',
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: 'rgba(255,255,255,0.65)', minWidth: 40 }}>
+                <ListItemIcon sx={{ color: 'rgba(248,250,252,0.65)', minWidth: 40 }}>
                   {item.text === 'Notifications' && unreadCount > 0 ? (
                     <Badge badgeContent={unreadCount} color="error">
                       {item.icon}
@@ -245,7 +245,7 @@ const Sidebar = ({ open, onClose }) => {
                 </ListItemIcon>
                 <ListItemText 
                   primary={item.text}
-                  primaryTypographyProps={{ sx: { color: 'rgba(255,255,255,0.75)' } }}
+                  primaryTypographyProps={{ sx: { color: 'rgba(248,250,252,0.75)' } }}
                 />
               </ListItem>
             </motion.div>

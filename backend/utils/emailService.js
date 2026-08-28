@@ -25,7 +25,7 @@ const sendEmail = async (options) => {
 
   // Define email options
   const mailOptions = {
-    from: `Cryptosimia Support <${process.env.EMAIL_FROM || 'support@cryptosimia.com'}>`,
+    from: `IG AUS Support <${process.env.EMAIL_FROM || 'support@IG AUS.com'}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,

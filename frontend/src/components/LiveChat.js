@@ -536,12 +536,12 @@ const LiveChat = () => {
             sx={{
               width: 48,
               height: 48,
-              bgcolor: '#00E5FF',
-              boxShadow: '0 8px 32px rgba(0, 229, 255, 0.4)',
-              color: '#131A2E',
+              bgcolor: '#00FF9D',
+              boxShadow: '0 8px 32px rgba(0, 255, 157, 0.4)',
+              color: '#0B0E14',
               '&:hover': {
-                bgcolor: '#00B3CC',
-                boxShadow: '0 8px 32px rgba(0, 229, 255, 0.6)',
+                bgcolor: '#00CC7D',
+                boxShadow: '0 8px 32px rgba(0, 255, 157, 0.6)',
               }
             }}
           >
@@ -577,30 +577,30 @@ const LiveChat = () => {
                 flexDirection: 'column',
                 borderRadius: 3,
                 overflow: 'hidden',
-                border: '1px solid rgba(0, 229, 255, 0.15)',
-                background: '#0D1117',
+                border: '1px solid rgba(0, 255, 157, 0.15)',
+                background: '#0B0E14',
               }}
             >
               {/* Header */}
               <Box
                 sx={{
                   p: 2,
-                  background: 'linear-gradient(135deg, rgba(0,229,255,0.12), rgba(79,124,255,0.08))',
-                  borderBottom: '1px solid rgba(0, 229, 255, 0.15)',
+                  background: 'linear-gradient(135deg, rgba(0,255,157,0.12), rgba(59,130,246,0.08))',
+                  borderBottom: '1px solid rgba(0, 255, 157, 0.15)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Box sx={{ p: 0.8, borderRadius: 2, bgcolor: 'rgba(0,229,255,0.15)', display: 'flex' }}>
-                    <SupportAgent sx={{ color: '#00E5FF', fontSize: 22 }} />
+                  <Box sx={{ p: 0.8, borderRadius: 2, bgcolor: 'rgba(0,255,157,0.15)', display: 'flex' }}>
+                    <SupportAgent sx={{ color: '#00FF9D', fontSize: 22 }} />
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1, color: '#F8FAFC' }}>
                       Live Support
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#00E5FF', fontSize: '0.65rem' }}>
+                    <Typography variant="caption" sx={{ color: '#00FF9D', fontSize: '0.65rem' }}>
                       ● Online
                     </Typography>
                   </Box>
@@ -661,11 +661,11 @@ const LiveChat = () => {
                                       p: '12px 14px',
                                       borderRadius: '18px 18px 18px 4px',
                                       bgcolor: 'rgba(255,255,255,0.05)',
-                                      border: '1px solid rgba(0, 229, 255, 0.2)',
+                                      border: '1px solid rgba(0, 255, 157, 0.2)',
                                     }}
                                   >
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                      <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#00E5FF' }}>
+                                      <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#00FF9D' }}>
                                         Support
                                       </Typography>
                                       <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
@@ -695,10 +695,10 @@ const LiveChat = () => {
                                       ? '18px 18px 4px 18px'
                                       : '18px 18px 18px 4px',
                                     bgcolor: message.userId?._id === (user?._id || user?.id)
-                                      ? 'rgba(0, 229, 255, 0.18)'
+                                      ? 'rgba(0, 255, 157, 0.18)'
                                       : 'rgba(255, 255, 255, 0.06)',
                                     border: message.userId?._id === (user?._id || user?.id)
-                                      ? '1px solid rgba(0, 229, 255, 0.25)'
+                                      ? '1px solid rgba(0, 255, 157, 0.25)'
                                       : '1px solid rgba(255, 255, 255, 0.08)',
                                   }}
                                 >
@@ -714,7 +714,7 @@ const LiveChat = () => {
                                     {/* Seen tick for current user's messages */}
                                     {message.userId?._id === (user?._id || user?.id) && (
                                       message.isRead
-                                        ? <DoneAll sx={{ fontSize: 13, color: '#00E5FF', ml: 0.5 }} titleAccess="Seen" />
+                                        ? <DoneAll sx={{ fontSize: 13, color: '#00FF9D', ml: 0.5 }} titleAccess="Seen" />
                                         : <Done sx={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', ml: 0.5 }} titleAccess="Delivered" />
                                     )}
                                   </Box>
@@ -748,7 +748,7 @@ const LiveChat = () => {
                                         if (isAddrValue) {
                                           const addr = line.trim();
                                           return (
-                                            <Box key={lineIdx} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25, mb: 0.5, p: '6px 10px', borderRadius: 2, bgcolor: 'rgba(0,229,255,0.07)', border: '1px solid rgba(0,229,255,0.18)' }}>
+                                            <Box key={lineIdx} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25, mb: 0.5, p: '6px 10px', borderRadius: 2, bgcolor: 'rgba(0,255,157,0.07)', border: '1px solid rgba(0,255,157,0.18)' }}>
                                               <Typography variant="body2" sx={{ flex: 1, wordBreak: 'break-all', fontSize: '0.78rem', color: '#E2E8F0', fontFamily: 'monospace' }}>
                                                 {addr}
                                               </Typography>
@@ -762,12 +762,12 @@ const LiveChat = () => {
                                                     setTimeout(() => setCopiedAddr(null), 2000);
                                                   }}
                                                   sx={{
-                                                    color: copiedAddr === addr ? '#00C853' : '#00E5FF',
+                                                    color: copiedAddr === addr ? '#10B981' : '#00FF9D',
                                                     p: '4px',
                                                     flexShrink: 0,
-                                                    bgcolor: copiedAddr === addr ? 'rgba(0,200,83,0.15)' : 'rgba(0,229,255,0.12)',
+                                                    bgcolor: copiedAddr === addr ? 'rgba(16,185,129,0.15)' : 'rgba(0,255,157,0.12)',
                                                     transition: 'all 0.25s ease',
-                                                    '&:hover': { bgcolor: copiedAddr === addr ? 'rgba(0,200,83,0.28)' : 'rgba(0,229,255,0.28)' }
+                                                    '&:hover': { bgcolor: copiedAddr === addr ? 'rgba(16,185,129,0.28)' : 'rgba(0,255,157,0.28)' }
                                                   }}
                                                 >
                                                   {copiedAddr === addr

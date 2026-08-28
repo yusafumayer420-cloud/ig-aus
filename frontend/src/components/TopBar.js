@@ -77,10 +77,10 @@ const TopBar = ({ onMenuClick }) => {
         position="static" 
         elevation={0}
         sx={{ 
-          background: 'rgba(5, 8, 22, 0.85)',
+          background: 'rgba(11, 14, 20, 0.85)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderBottom: '1px solid rgba(148, 163, 184, 0.06)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
         }}
       >
         <Toolbar sx={{ minHeight: 60, px: 2 }}>
@@ -111,7 +111,7 @@ const TopBar = ({ onMenuClick }) => {
               <Box
                 component="img"
                 src="/logo.png"
-                alt="Cryptosimia Logo"
+                alt="IG AUS Logo"
                 sx={{
                   height: 44,
                   width: 44,
@@ -119,11 +119,11 @@ const TopBar = ({ onMenuClick }) => {
                   display: 'block',
                   borderRadius: '50%',
                   border: logoHovered
-                    ? '2px solid rgba(0, 200, 255, 0.9)'
-                    : '2px solid rgba(0, 120, 255, 0.4)',
+                    ? '2px solid rgba(0, 255, 157, 0.9)'
+                    : '2px solid rgba(0, 255, 157, 0.3)',
                   boxShadow: logoHovered
-                    ? '0 0 20px rgba(0, 200, 255, 0.7), 0 0 40px rgba(0, 120, 255, 0.3)'
-                    : '0 0 12px rgba(0, 120, 255, 0.4)',
+                    ? '0 0 20px rgba(0, 255, 157, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)'
+                    : '0 0 12px rgba(0, 255, 157, 0.25)',
                   transition: 'border 0.3s ease, box-shadow 0.3s ease',
                 }}
               />
@@ -147,7 +147,7 @@ const TopBar = ({ onMenuClick }) => {
                         fontSize: '1.15rem',
                         fontWeight: 800,
                         letterSpacing: '0.04em',
-                        background: 'linear-gradient(90deg, #ffffff 0%, #00E5FF 50%, #4F7CFF 100%)',
+                        background: 'linear-gradient(90deg, #F8FAFC 0%, #00FF9D 50%, #3B82F6 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
@@ -155,7 +155,7 @@ const TopBar = ({ onMenuClick }) => {
                         fontFamily: '"Inter", sans-serif',
                       }}
                     >
-                      CRYPTO<Box component="span" sx={{ color: '#00E5FF', WebkitTextFillColor: '#00E5FF' }}>SIMIA</Box>
+                      IG<Box component="span" sx={{ color: '#00FF9D', WebkitTextFillColor: '#00FF9D' }}> AUS</Box>
                     </Box>
                     <Box
                       component="span"
@@ -163,7 +163,7 @@ const TopBar = ({ onMenuClick }) => {
                         fontSize: '0.55rem',
                         fontWeight: 500,
                         letterSpacing: '0.18em',
-                        color: 'rgba(0, 229, 255, 0.7)',
+                        color: 'rgba(0, 255, 157, 0.8)',
                         textTransform: 'uppercase',
                         mt: '2px',
                       }}
@@ -181,7 +181,7 @@ const TopBar = ({ onMenuClick }) => {
               onClick={() => window.location.reload()} 
               sx={{ 
                 color: '#94A3B8',
-                '&:hover': { color: '#FFFFFF' },
+                '&:hover': { color: '#F8FAFC' },
                 transition: 'color 0.2s ease',
               }}
             >
@@ -197,16 +197,16 @@ const TopBar = ({ onMenuClick }) => {
                 <Avatar
                   src={user?.profilePicture}
                   sx={{
-                    bgcolor: '#00E5FF',
-                    color: '#050816',
+                    bgcolor: '#00FF9D',
+                    color: '#0B0E14',
                     width: 34,
                     height: 34,
                     fontSize: '0.875rem',
                     fontWeight: 700,
-                    border: '2px solid rgba(0, 229, 255, 0.3)',
+                    border: '2px solid rgba(0, 255, 157, 0.4)',
                     transition: 'border-color 0.2s ease',
                     '&:hover': {
-                      borderColor: 'rgba(0, 229, 255, 0.6)',
+                      borderColor: 'rgba(0, 255, 157, 0.8)',
                     },
                   }}
                 >
@@ -227,16 +227,16 @@ const TopBar = ({ onMenuClick }) => {
             mt: 1.5,
             minWidth: 220,
             borderRadius: 3,
-            background: 'rgba(17, 24, 39, 0.95)',
+            background: 'rgba(20, 27, 40, 0.95)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(148, 163, 184, 0.1)',
-            boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 16px 48px rgba(0, 0, 0, 0.5)',
           }
         }}
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#F8FAFC' }}>
             {user?.fullName || 'User'}
           </Typography>
           <Typography variant="caption" sx={{ color: '#94A3B8' }}>
@@ -252,7 +252,7 @@ const TopBar = ({ onMenuClick }) => {
           </Box>
         </Box>
 
-        <Divider sx={{ borderColor: 'rgba(148, 163, 184, 0.08)' }} />
+        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
 
         <MenuItem onClick={handleProfile} sx={{ py: 1.25 }}>
           <Person sx={{ mr: 2, fontSize: 18, color: '#94A3B8' }} />
@@ -274,9 +274,9 @@ const TopBar = ({ onMenuClick }) => {
           <Typography variant="body2">Settings</Typography>
         </MenuItem>
 
-        <Divider sx={{ borderColor: 'rgba(148, 163, 184, 0.08)' }} />
+        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
 
-        <MenuItem onClick={handleLogout} sx={{ py: 1.25, color: '#FF5252' }}>
+        <MenuItem onClick={handleLogout} sx={{ py: 1.25, color: '#EF4444' }}>
           <Logout sx={{ mr: 2, fontSize: 18 }} />
           <Typography variant="body2">Logout</Typography>
         </MenuItem>

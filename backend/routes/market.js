@@ -208,7 +208,7 @@ router.get('/klines', async (req, res) => {
         params: { granularity, limit: safeLimit },
         timeout: 10000,
         headers: {
-          'User-Agent': 'Cryptosimia/1.0',
+          'User-Agent': 'IG AUS/1.0',
           'Accept':     'application/json',
         },
       }

@@ -352,14 +352,14 @@ const HomePage = ({ marketData }) => {
                   fontSize: { xs: '2rem', sm: '2.4rem' },
                 }}
               >
-                Trade Crypto{' '}
+                Trade With Confidence.{' '}
                 <Box component="span" sx={{
-                  background: 'linear-gradient(135deg, #00E5FF 0%, #4F7CFF 60%, #a78bfa 100%)',
+                  background: 'linear-gradient(135deg, #00FF9D 0%, #4F7CFF 60%, #a78bfa 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                 }}>
-                  Without Limits.
+                  Trade With IG AUS.
                 </Box>
               </Typography>
 
@@ -374,7 +374,7 @@ const HomePage = ({ marketData }) => {
                   fontWeight: 400,
                 }}
               >
-                Experience seamless trading, instant execution, low fees, and advanced analytics built for beginners and professional traders alike.
+                Discover a smarter trading experience with powerful market tools, fast execution, and everything you need to navigate today's financial markets.
               </Typography>
 
               <Box sx={{ display: 'flex', gap: 1.5, mb: 2.5, flexWrap: 'wrap' }}>

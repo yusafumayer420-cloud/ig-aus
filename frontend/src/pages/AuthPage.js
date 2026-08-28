@@ -63,7 +63,7 @@ const AuthPage = () => {
             <Box
               component="img"
               src="/logo.png"
-              alt="Cryptosimia Logo"
+              alt="IG AUS Logo"
               sx={{
                 height: 120,
                 width: 120,
@@ -215,7 +215,7 @@ const AuthPage = () => {
         {/* Features */}
         <Box sx={{ mt: 4, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Why choose Cryptosimia?
+            Why choose IG AUS?
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, flexWrap: 'wrap' }}>
             {['🔒 Secure', '⚡ Fast', '💰 Low Fees', '📱 Mobile First'].map((feature, index) => (

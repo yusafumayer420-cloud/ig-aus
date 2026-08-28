@@ -117,7 +117,7 @@ const AdminLogin = () => {
               <Box sx={{ textAlign: 'center', mb: 4 }}>
 
                 
-                <Box component="img" src="/logo.png" alt="Cryptosimia Logo" sx={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover', mb: 2, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }} />
+                <Box component="img" src="/logo.png" alt="IG AUS Logo" sx={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover', mb: 2, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }} />
                 <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#8b5cf6', mb: 1 }}>
                   Admin Portal
                 </Typography>
@@ -253,7 +253,7 @@ const AdminLogin = () => {
               {/* Footer */}
               <Box sx={{ mt: 4, textAlign: 'center' }}>
                 <Typography variant="caption" color="text.secondary">
-                  © {new Date().getFullYear()} Cryptosimia Admin Portal. All rights reserved.
+                  © {new Date().getFullYear()} IG AUS Admin Portal. All rights reserved.
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
                   v2.1.0 • Last updated: Today

@@ -134,10 +134,10 @@ const WelcomePage = () => {
           style={{ textAlign: 'center', marginBottom: 24 }}
         >
           <Box sx={{ mx: 'auto', mb: 1, display: 'flex', justifyContent: 'center' }}>
-            <img src="/logo.png" alt="Cryptosimia Logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: '50%' }} />
+            <img src="/logo.png" alt="IG AUS Logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: '50%' }} />
           </Box>
           <Typography sx={{ fontSize: '0.6rem', letterSpacing: 3, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', mb: 0.3 }}>
-            CRYPTOSIMIA
+            IG AUS
           </Typography>
           <Typography sx={{ fontSize: '0.5rem', letterSpacing: 1.5, color: 'rgba(0,229,255,0.4)', textTransform: 'uppercase' }}>
             TRADE · INVEST · GROW

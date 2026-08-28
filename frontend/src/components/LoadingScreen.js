@@ -11,8 +11,8 @@ const LoadingScreen = ({ message = 'Loading...' }) => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #0A0E17 0%, #131A2E 100%)',
-        color: 'white',
+        background: 'linear-gradient(135deg, #07090E 0%, #0B0E14 60%, #121824 100%)',
+        color: '#F8FAFC',
       }}
     >
       <motion.div
@@ -22,13 +22,13 @@ const LoadingScreen = ({ message = 'Loading...' }) => {
         <CircularProgress 
           size={60} 
           thickness={4}
-          sx={{ color: '#00E5FF', mb: 3 }}
+          sx={{ color: '#00FF9D', mb: 3 }}
         />
       </motion.div>
       <Box
         component="img"
         src="/logo.png"
-        alt="Cryptosimia Logo"
+        alt="IG AUS Logo"
         sx={{
           height: 80,
           width: 80,
@@ -37,8 +37,8 @@ const LoadingScreen = ({ message = 'Loading...' }) => {
           mt: 2,
           borderRadius: '50%',
           mixBlendMode: 'normal',
-          border: '2px solid rgba(0, 120, 255, 0.4)',
-          boxShadow: '0 0 16px rgba(0, 120, 255, 0.5)',
+          border: '2px solid rgba(0, 255, 157, 0.4)',
+          boxShadow: '0 0 16px rgba(0, 255, 157, 0.4)',
         }}
       />
       <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>

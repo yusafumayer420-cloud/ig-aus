@@ -60,36 +60,36 @@ const GlobalTradeResult = () => {
 // Each scene defines 3 orb colours/positions + 5 glow corner colours.
 // Values are interpolated linearly based on scroll progress.
 const SCENES = [
-  // 0 % — Cyan / Electric Blue (default)
-  { o1c:'0,229,255',  o1x:18, o1y:20, o1r:420,
-    o2c:'79,124,255', o2x:82, o2y:30, o2r:380,
-    o3c:'124,58,237', o3x:50, o3y:85, o3r:300,
-    tl:'0,229,255',   tr:'79,124,255',
-    cl:'124,58,237',  cr:'56,100,255',  bc:'0,200,83' },
-  // 25 % — Indigo / Deep Sapphire
-  { o1c:'56,100,255',  o1x:15, o1y:25, o1r:460,
-    o2c:'99,60,255',   o2x:80, o2y:20, o2r:400,
-    o3c:'59,130,246',  o3x:45, o3y:80, o3r:340,
-    tl:'56,100,255',  tr:'99,60,255',
-    cl:'79,124,255',  cr:'59,130,246', bc:'0,229,255' },
-  // 50 % — Purple / Violet Nebula
+  // 0 % — Electric Emerald & Royal Blue
+  { o1c:'0,255,157',  o1x:18, o1y:20, o1r:420,
+    o2c:'59,130,246', o2x:82, o2y:30, o2r:380,
+    o3c:'139,92,246', o3x:50, o3y:85, o3r:300,
+    tl:'0,255,157',   tr:'59,130,246',
+    cl:'139,92,246',  cr:'59,130,246',  bc:'16,185,129' },
+  // 25 % — Royal Cyber Blue & Violet
+  { o1c:'59,130,246',  o1x:15, o1y:25, o1r:460,
+    o2c:'139,92,246',  o2x:80, o2y:20, o2r:400,
+    o3c:'0,255,157',   o3x:45, o3y:80, o3r:340,
+    tl:'59,130,246',  tr:'139,92,246',
+    cl:'59,130,246',  cr:'0,255,157',   bc:'139,92,246' },
+  // 50 % — Deep Violet & Emerald Glow
   { o1c:'139,92,246',  o1x:12, o1y:35, o1r:450,
-    o2c:'168,85,247',  o2x:85, o2y:40, o2r:420,
-    o3c:'124,58,237',  o3x:55, o3y:90, o3r:320,
-    tl:'124,58,237',  tr:'168,85,247',
-    cl:'139,92,246',  cr:'99,60,255',  bc:'79,124,255' },
-  // 75 % — Rose / Warm Violet
-  { o1c:'236,72,153',  o1x:20, o1y:15, o1r:430,
-    o2c:'168,85,247',  o2x:78, o2y:35, o2r:390,
-    o3c:'99,60,255',   o3x:48, o3y:88, o3r:310,
-    tl:'236,72,153',  tr:'168,85,247',
-    cl:'99,60,255',   cr:'124,58,237', bc:'236,72,153' },
-  // 100 % — Teal / Emerald Ocean
-  { o1c:'0,229,255',  o1x:10, o1y:10, o1r:440,
-    o2c:'0,200,83',   o2x:88, o2y:28, o2r:360,
-    o3c:'56,100,255', o3x:50, o3y:92, o3r:300,
-    tl:'0,200,83',    tr:'0,229,255',
-    cl:'56,100,255',  cr:'0,200,83',   bc:'0,229,255' },
+    o2c:'0,255,157',   o2x:85, o2y:40, o2r:420,
+    o3c:'59,130,246',  o3x:55, o3y:90, o3r:320,
+    tl:'139,92,246',  tr:'0,255,157',
+    cl:'59,130,246',  cr:'139,92,246',  bc:'0,255,157' },
+  // 75 % — Sapphire & Emerald Nebula
+  { o1c:'59,130,246',  o1x:20, o1y:15, o1r:430,
+    o2c:'16,185,129',  o2x:78, o2y:35, o2r:390,
+    o3c:'139,92,246',  o3x:48, o3y:88, o3r:310,
+    tl:'59,130,246',  tr:'16,185,129',
+    cl:'139,92,246',  cr:'0,255,157',   bc:'59,130,246' },
+  // 100 % — Mint Emerald Ocean
+  { o1c:'0,255,157',  o1x:10, o1y:10, o1r:440,
+    o2c:'16,185,129',  o2x:88, o2y:28, o2r:360,
+    o3c:'59,130,246', o3x:50, o3y:92, o3r:300,
+    tl:'16,185,129',   tr:'0,255,157',
+    cl:'59,130,246',  cr:'16,185,129',  bc:'0,255,157' },
 ];
 
 // Interpolate a numeric CSS variable value between two scenes
@@ -228,9 +228,11 @@ function AppContent({ marketData, sidebarOpen, setSidebarOpen }) {
         position="top-right"
         toastOptions={{
           style: {
-            background: '#131A2E',
-            color: '#fff',
+            background: 'rgba(18, 24, 36, 0.95)',
+            color: '#F8FAFC',
             border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            backdropFilter: 'blur(16px)',
           },
         }}
       />

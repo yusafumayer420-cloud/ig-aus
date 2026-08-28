@@ -39,11 +39,11 @@ const rawAdminUrl = process.env.ADMIN_URL;
 
 // Start with hardcoded fallback origins (you can keep or remove)
 let allowedOrigins = [
-  'https://cryptosimia.com',
-  'https://www.cryptosimia.com',
-  'https://admin.cryptosimia.com',
-  'https://www.admin.cryptosimia.com',
-  'https://api.cryptosimia.com'
+  'https://IG AUS.com',
+  'https://www.IG AUS.com',
+  'https://admin.IG AUS.com',
+  'https://www.admin.IG AUS.com',
+  'https://api.IG AUS.com'
 ];
 
 // Helper to add an origin and optionally its www variant
@@ -67,8 +67,8 @@ if (rawAdminUrl) {
   rawAdminUrl.split(',').map(s => s.trim()).forEach(addOriginWithWww);
 }
 
-// Fallback for development if no env vars provided
-if (allowedOrigins.length === 0) {
+// Fallback for development
+if (process.env.NODE_ENV !== 'production') {
   allowedOrigins.push("http://localhost:3000", "http://localhost:3001");
 }
 

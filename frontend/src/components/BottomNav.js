@@ -44,10 +44,10 @@ const BottomNav = () => {
         sx={{
           width: '100%',
           maxWidth: 600,
-          background: 'rgba(5, 8, 22, 0.88)',
+          background: 'rgba(18, 24, 36, 0.90)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(148, 163, 184, 0.08)', // Border all around
+          border: '1px solid rgba(255, 255, 255, 0.08)', // Border all around
           borderRadius: '30px', // Bubble/pill shape
           display: 'flex',
           alignItems: 'center',
@@ -55,7 +55,7 @@ const BottomNav = () => {
           px: 1,
           py: 0.75,
           position: 'relative',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', // Add nice shadow for floating effect
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 255, 157, 0.03)',
         }}
       >
         {navItems.map((item, index) => {
@@ -87,15 +87,15 @@ const BottomNav = () => {
                       width: 52,
                       height: 52,
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00E5FF 0%, #4F7CFF 100%)',
+                      background: 'linear-gradient(135deg, #00FF9D 0%, #00CC7D 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: '0 4px 20px rgba(0, 229, 255, 0.35), 0 0 40px rgba(0, 229, 255, 0.1)',
-                      border: '2px solid rgba(255, 255, 255, 0.15)',
+                      boxShadow: '0 4px 20px rgba(0, 255, 157, 0.35), 0 0 30px rgba(0, 255, 157, 0.15)',
+                      border: '2px solid rgba(255, 255, 255, 0.2)',
                     }}
                   >
-                    <IconComponent sx={{ fontSize: 24, color: '#050816' }} />
+                    <IconComponent sx={{ fontSize: 24, color: '#0B0E14' }} />
                   </Box>
                 </motion.div>
                 <Typography
@@ -103,7 +103,7 @@ const BottomNav = () => {
                     fontSize: '0.6rem',
                     fontWeight: 600,
                     mt: 0.5,
-                    color: '#00E5FF',
+                    color: '#00FF9D',
                     letterSpacing: '0.03em',
                   }}
                 >
@@ -137,7 +137,7 @@ const BottomNav = () => {
                 <IconComponent
                   sx={{
                     fontSize: 22,
-                    color: isActive ? '#00E5FF' : '#94A3B8',
+                    color: isActive ? '#00FF9D' : '#94A3B8',
                     transition: 'color 0.2s ease',
                   }}
                 />
@@ -148,7 +148,7 @@ const BottomNav = () => {
                   fontSize: '0.6rem',
                   fontWeight: isActive ? 600 : 400,
                   mt: 0.25,
-                  color: isActive ? '#00E5FF' : '#94A3B8',
+                  color: isActive ? '#00FF9D' : '#94A3B8',
                   transition: 'color 0.2s ease',
                   letterSpacing: '0.02em',
                 }}
@@ -167,8 +167,8 @@ const BottomNav = () => {
                     width: 4,
                     height: 4,
                     borderRadius: '50%',
-                    background: '#00E5FF',
-                    boxShadow: '0 0 8px rgba(0, 229, 255, 0.6)',
+                    background: '#00FF9D',
+                    boxShadow: '0 0 8px rgba(0, 255, 157, 0.6)',
                   }}
                 />
               )}

@@ -218,7 +218,7 @@ const ProfilePage = () => {
           <Box sx={{ position: 'relative' }}>
             <Avatar
               src={user?.profilePicture}
-              sx={{ width: 72, height: 72, bgcolor: '#1a1d24', border: '2px solid rgba(0, 229, 255, 0.4)', boxShadow: '0 0 15px rgba(0,229,255,0.2)', cursor: 'pointer' }}
+              sx={{ width: 72, height: 72, bgcolor: '#1a1d24', border: '2px solid rgba(0, 255, 157, 0.4)', boxShadow: '0 0 15px rgba(0,255,157,0.2)', cursor: 'pointer' }}
               onClick={() => setShowProfilePicPreview(true)}
             >
               {!user?.profilePicture && (user?.fullName?.charAt(0).toUpperCase() || 'U')}
@@ -227,7 +227,7 @@ const ProfilePage = () => {
               <input accept="image/*" id="profile-pic-upload" type="file" style={{ display: 'none' }} onChange={handleProfilePictureUpload} disabled={uploading} />
               <IconButton
                 component="span" disabled={uploading}
-                sx={{ position: 'absolute', bottom: -5, right: -5, bgcolor: '#00e5ff', color: '#0b0e14', width: 28, height: 28, '&:hover': { bgcolor: '#33eaff' } }}
+                sx={{ position: 'absolute', bottom: -5, right: -5, bgcolor: '#00FF9D', color: '#0b0e14', width: 28, height: 28, '&:hover': { bgcolor: '#33FFB3' } }}
               >
                 {uploading ? <CircularProgress size={14} sx={{ color: '#0b0e14' }} /> : <CameraAlt sx={{ fontSize: 14 }} />}
               </IconButton>
@@ -276,8 +276,8 @@ const ProfilePage = () => {
                     '&:hover': {
                       bgcolor: 'rgba(42,45,52,0.7)',
                       transform: 'translateY(-3px)',
-                      boxShadow: '0 8px 24px rgba(0, 229, 255, 0.2)',
-                      borderColor: 'rgba(0, 229, 255, 0.4)'
+                      boxShadow: '0 8px 24px rgba(0, 255, 157, 0.2)',
+                      borderColor: 'rgba(0, 255, 157, 0.4)'
                     },
                     width: 56, height: 56, borderRadius: 3
                   }}
@@ -296,7 +296,7 @@ const ProfilePage = () => {
             {[
               { icon: <Language />, label: 'Language', value: selectedLanguage.flag + ' ' + selectedLanguage.name, action: () => setShowLanguage(true) },
               { icon: <SupportAgent />, label: 'Online service', action: () => window.dispatchEvent(new Event('open-live-chat')) },
-              { icon: <VerifiedUser />, label: 'KYC Verification', value: verificationStatus === 'verified' ? 'Verified' : 'Unverified', valueColor: verificationStatus === 'verified' ? '#00e5ff' : '#8b93a6', action: () => setShowKYC(true) },
+              { icon: <VerifiedUser />, label: 'KYC Verification', value: verificationStatus === 'verified' ? 'Verified' : 'Unverified', valueColor: verificationStatus === 'verified' ? '#00FF9D' : '#8b93a6', action: () => setShowKYC(true) },
               { icon: <AccountBalanceWallet />, label: 'Personal Information', action: () => setShowEditProfile(true) },
               { icon: <HelpOutline />, label: 'FAQ', action: () => navigate('/faq') },
               { icon: <Info />, label: 'About Us', action: () => navigate('/about') },
@@ -322,8 +322,8 @@ const ProfilePage = () => {
                     '&:hover': {
                       bgcolor: 'rgba(42,45,52,0.7)',
                       transform: 'translateY(-3px)',
-                      boxShadow: '0 8px 28px rgba(0, 229, 255, 0.2), inset 0 0 12px rgba(0, 229, 255, 0.05)',
-                      borderColor: 'rgba(0, 229, 255, 0.35)'
+                      boxShadow: '0 8px 28px rgba(0, 255, 157, 0.2), inset 0 0 12px rgba(0, 255, 157, 0.05)',
+                      borderColor: 'rgba(0, 255, 157, 0.35)'
                     }
                   }}
                   onClick={item.action}
@@ -331,9 +331,9 @@ const ProfilePage = () => {
                   <ListItem sx={{ py: 2, px: 2.5 }}>
                     <ListItemIcon sx={{
                       minWidth: 44,
-                      color: '#00E5FF',
+                      color: '#00FF9D',
                       '& .MuiSvgIcon-root': {
-                        filter: 'drop-shadow(0 0 4px rgba(0, 229, 255, 0.3))',
+                        filter: 'drop-shadow(0 0 4px rgba(0, 255, 157, 0.3))',
                         transition: 'all 0.3s'
                       }
                     }}>
@@ -367,7 +367,7 @@ const ProfilePage = () => {
           <TextField margin="dense" fullWidth label="Confirm Password" type={showPassword.confirm ? 'text' : 'password'} value={passwordData.confirmPassword} onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })} sx={textFieldStyles} InputProps={{ endAdornment: (<InputAdornment position="end"><IconButton sx={{ color: '#8b93a6' }} onClick={() => setShowPassword({ ...showPassword, confirm: !showPassword.confirm })}>{showPassword.confirm ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment>) }} />
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button variant="contained" fullWidth onClick={handleChangePassword} sx={{ borderRadius: 2, bgcolor: '#00e5ff', color: '#0b0e14', fontWeight: 700, '&:hover': { bgcolor: '#33eaff' } }}>Update Password</Button>
+          <Button variant="contained" fullWidth onClick={handleChangePassword} sx={{ borderRadius: 2, bgcolor: '#00FF9D', color: '#0b0e14', fontWeight: 700, '&:hover': { bgcolor: '#33FFB3' } }}>Update Password</Button>
         </DialogActions>
       </Dialog>
 
@@ -389,7 +389,7 @@ const ProfilePage = () => {
           </Grid>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button variant="contained" fullWidth onClick={handleSaveProfile} sx={{ borderRadius: 2, bgcolor: '#00e5ff', color: '#0b0e14', fontWeight: 700, '&:hover': { bgcolor: '#33eaff' } }}>Save Changes</Button>
+          <Button variant="contained" fullWidth onClick={handleSaveProfile} sx={{ borderRadius: 2, bgcolor: '#00FF9D', color: '#0b0e14', fontWeight: 700, '&:hover': { bgcolor: '#33FFB3' } }}>Save Changes</Button>
         </DialogActions>
       </Dialog>
 
@@ -400,9 +400,9 @@ const ProfilePage = () => {
           <IconButton onClick={() => setShowKYC(false)} size="small" sx={{ color: '#8b93a6' }}><Close /></IconButton>
         </DialogTitle>
         <DialogContent dividers sx={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-          <Box sx={{ p: 2, mb: 3, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2, background: verificationStatus === 'verified' ? 'rgba(0, 200, 83, 0.1)' : 'rgba(0, 229, 255, 0.1)' }}>
-            {verificationStatus === 'verified' ? <CheckCircle sx={{ color: '#00C853', fontSize: 28 }} /> : <Upload sx={{ color: '#00E5FF', fontSize: 28 }} />}
-            <Typography variant="body2" sx={{ color: verificationStatus === 'verified' ? '#00C853' : '#00E5FF', fontWeight: 600 }}>
+          <Box sx={{ p: 2, mb: 3, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2, background: verificationStatus === 'verified' ? 'rgba(0, 200, 83, 0.1)' : 'rgba(0, 255, 157, 0.1)' }}>
+            {verificationStatus === 'verified' ? <CheckCircle sx={{ color: '#00C853', fontSize: 28 }} /> : <Upload sx={{ color: '#00FF9D', fontSize: 28 }} />}
+            <Typography variant="body2" sx={{ color: verificationStatus === 'verified' ? '#00C853' : '#00FF9D', fontWeight: 600 }}>
               {verificationStatus === 'verified' ? 'Your identity has been verified. You can now access all features.' : verificationStatus === 'pending' ? 'Your documents are under review. This usually takes 1-2 business days.' : 'Please upload your identity documents to verify your account.'}
             </Typography>
           </Box>
@@ -420,12 +420,12 @@ const ProfilePage = () => {
                       onClick={() => setDocTypeChoice(opt.value)}
                       sx={{
                         flex: 1, py: 1.2, px: 1, borderRadius: 2, textAlign: 'center', cursor: 'pointer',
-                        border: docTypeChoice === opt.value ? '2px solid #00E5FF' : '1px solid rgba(255,255,255,0.12)',
-                        bgcolor: docTypeChoice === opt.value ? 'rgba(0,229,255,0.08)' : 'rgba(255,255,255,0.03)',
+                        border: docTypeChoice === opt.value ? '2px solid #00FF9D' : '1px solid rgba(255,255,255,0.12)',
+                        bgcolor: docTypeChoice === opt.value ? 'rgba(0,255,157,0.08)' : 'rgba(255,255,255,0.03)',
                         transition: 'all 0.2s',
                       }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: docTypeChoice === opt.value ? 700 : 400, color: docTypeChoice === opt.value ? '#00E5FF' : '#8b93a6' }}>
+                      <Typography variant="body2" sx={{ fontWeight: docTypeChoice === opt.value ? 700 : 400, color: docTypeChoice === opt.value ? '#00FF9D' : '#8b93a6' }}>
                         {opt.label}
                       </Typography>
                     </Box>
@@ -449,7 +449,7 @@ const ProfilePage = () => {
                     </Box>
                     <input type="file" accept="image/*" id={docType} style={{ display: 'none' }} onChange={(e) => handleFileSelect(docType, e)} disabled={verificationStatus === 'verified' || uploading} />
                     <label htmlFor={docType}>
-                      <Button component="span" variant={docUrl ? "outlined" : "contained"} fullWidth disabled={uploadingDoc[docType] || verificationStatus === 'verified'} sx={{ borderRadius: 2, py: 0.5, borderColor: docUrl ? 'rgba(0, 229, 255, 0.3)' : 'transparent', bgcolor: docUrl ? 'transparent' : 'rgba(255,255,255,0.1)', color: docUrl && verificationStatus !== 'verified' ? '#00E5FF' : '#fff' }}>
+                      <Button component="span" variant={docUrl ? "outlined" : "contained"} fullWidth disabled={uploadingDoc[docType] || verificationStatus === 'verified'} sx={{ borderRadius: 2, py: 0.5, borderColor: docUrl ? 'rgba(0, 255, 157, 0.3)' : 'transparent', bgcolor: docUrl ? 'transparent' : 'rgba(255,255,255,0.1)', color: docUrl && verificationStatus !== 'verified' ? '#00FF9D' : '#fff' }}>
                         {uploadingDoc[docType] ? 'Uploading...' : docUrl ? (verificationStatus === 'verified' ? 'Verified' : 'Change') : 'Upload'}
                       </Button>
                     </label>
@@ -468,7 +468,7 @@ const ProfilePage = () => {
           <IconButton onClick={() => setShowActivity(false)} size="small" sx={{ color: '#8b93a6' }}><Close /></IconButton>
         </DialogTitle>
         <DialogContent dividers sx={{ p: 0, borderColor: 'rgba(255,255,255,0.1)' }}>
-          <Tabs value={activitySubTab} onChange={(e, v) => setActivitySubTab(v)} variant="fullWidth" sx={{ '& .MuiTabs-indicator': { backgroundColor: '#00E5FF' }, '& .MuiTab-root': { color: '#8b93a6', '&.Mui-selected': { color: '#00E5FF' } } }}>
+          <Tabs value={activitySubTab} onChange={(e, v) => setActivitySubTab(v)} variant="fullWidth" sx={{ '& .MuiTabs-indicator': { backgroundColor: '#00FF9D' }, '& .MuiTab-root': { color: '#8b93a6', '&.Mui-selected': { color: '#00FF9D' } } }}>
             <Tab label="Transactions" />
             <Tab label="Trades" />
           </Tabs>
@@ -540,11 +540,11 @@ const ProfilePage = () => {
               component="img"
               src={user?.profilePicture}
               alt="Profile Preview"
-              sx={{ width: '100%', maxWidth: '300px', height: 'auto', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '50%', border: '4px solid rgba(0, 229, 255, 0.4)', boxShadow: '0 0 30px rgba(0,229,255,0.3)' }}
+              sx={{ width: '100%', maxWidth: '300px', height: 'auto', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '50%', border: '4px solid rgba(0, 255, 157, 0.4)', boxShadow: '0 0 30px rgba(0,255,157,0.3)' }}
             />
           ) : (
             <Avatar
-              sx={{ width: 300, height: 300, bgcolor: '#1a1d24', border: '4px solid rgba(0, 229, 255, 0.4)', boxShadow: '0 0 30px rgba(0,229,255,0.3)', fontSize: '8rem' }}
+              sx={{ width: 300, height: 300, bgcolor: '#1a1d24', border: '4px solid rgba(0, 255, 157, 0.4)', boxShadow: '0 0 30px rgba(0,255,157,0.3)', fontSize: '8rem' }}
             >
               {user?.fullName?.charAt(0).toUpperCase() || 'U'}
             </Avatar>
@@ -621,8 +621,8 @@ const ProfilePage = () => {
                 sx={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   px: 2, py: 1.5, borderRadius: '12px', cursor: 'pointer', mb: 0.5,
-                  bgcolor: selectedLanguage.code === lang.code ? 'rgba(0,229,255,0.08)' : 'transparent',
-                  border: selectedLanguage.code === lang.code ? '1px solid rgba(0,229,255,0.25)' : '1px solid transparent',
+                  bgcolor: selectedLanguage.code === lang.code ? 'rgba(0,255,157,0.08)' : 'transparent',
+                  border: selectedLanguage.code === lang.code ? '1px solid rgba(0,255,157,0.25)' : '1px solid transparent',
                   transition: 'all 0.2s ease',
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' }
                 }}
@@ -630,12 +630,12 @@ const ProfilePage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography sx={{ fontSize: '1.6rem', lineHeight: 1 }}>{lang.flag}</Typography>
                   <Box>
-                    <Typography sx={{ fontWeight: 600, color: selectedLanguage.code === lang.code ? '#00E5FF' : '#fff', fontSize: '0.9rem' }}>{lang.name}</Typography>
+                    <Typography sx={{ fontWeight: 600, color: selectedLanguage.code === lang.code ? '#00FF9D' : '#fff', fontSize: '0.9rem' }}>{lang.name}</Typography>
                     <Typography sx={{ color: '#8b93a6', fontSize: '0.75rem' }}>{lang.native}</Typography>
                   </Box>
                 </Box>
                 {selectedLanguage.code === lang.code && (
-                  <CheckCircle sx={{ color: '#00E5FF', fontSize: 20 }} />
+                  <CheckCircle sx={{ color: '#00FF9D', fontSize: 20 }} />
                 )}
               </Box>
             ))}
@@ -650,7 +650,7 @@ const ProfilePage = () => {
           <IconButton onClick={() => setShowReferral(false)} size="small" sx={{ color: '#8b93a6' }}><Close /></IconButton>
         </DialogTitle>
         <DialogContent sx={{ px: 3, pb: 4, textAlign: 'center' }}>
-          <SupervisorAccount sx={{ fontSize: 64, color: '#00E5FF', mb: 2 }} />
+          <SupervisorAccount sx={{ fontSize: 64, color: '#00FF9D', mb: 2 }} />
           <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1 }}>Invite Friends, Earn Crypto</Typography>
           <Typography variant="body2" sx={{ color: '#8b93a6', mb: 4 }}>
             Share your unique referral link and invite friends to join our platform.
@@ -671,7 +671,7 @@ const ProfilePage = () => {
               <Button 
                 variant="contained" 
                 onClick={() => copyToClipboard(`${window.location.origin}/register?ref=${user?.referralCode || ''}`)}
-                sx={{ bgcolor: '#00E5FF', color: '#0b0e14', fontWeight: 'bold', borderRadius: 2, minWidth: '100px', '&:hover': { bgcolor: '#33eaff' } }}
+                sx={{ bgcolor: '#00FF9D', color: '#0b0e14', fontWeight: 'bold', borderRadius: 2, minWidth: '100px', '&:hover': { bgcolor: '#33FFB3' } }}
               >
                 COPY
               </Button>

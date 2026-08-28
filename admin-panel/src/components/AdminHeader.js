@@ -411,7 +411,7 @@ const AdminHeader = ({ onMenuClick, sidebarOpen }) => {
             {admin?.name || 'Admin User'}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {admin?.email || 'admin@cryptosimia.com'}
+            {admin?.email || 'admin@IG AUS.com'}
           </Typography>
         </Box>
 

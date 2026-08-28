@@ -1,6 +1,6 @@
 // Basic Service Worker to enable PWA installability
 
-const CACHE_NAME = 'cryptosimia-v1';
+const CACHE_NAME = 'IG AUS-v1';
 const urlsToCache = [
   '/',
   '/index.html',

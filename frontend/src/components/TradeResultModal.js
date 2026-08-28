@@ -16,7 +16,7 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
 
   const isWin = trade.outcome === 'win';
   const direction = trade.type === 'long' ? 'Buy Long' : 'Buy Short';
-  const directionColor = trade.type === 'long' ? '#00D395' : '#FF6B6B';
+  const directionColor = trade.type === 'long' ? '#10B981' : '#EF4444';
 
   return (
     <Dialog
@@ -32,13 +32,13 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
       sx={{ zIndex: 99999 }}
       PaperProps={{
         sx: {
-          bgcolor: 'rgba(23, 27, 38, 0.95)',
+          bgcolor: 'rgba(20, 27, 40, 0.95)',
           backgroundImage: 'none',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
           borderRadius: 4,
           overflow: 'hidden',
-          color: '#fff',
+          color: '#F8FAFC',
         },
       }}
     >
@@ -51,7 +51,7 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
               right: 12,
               top: 12,
               color: 'rgba(255, 255, 255, 0.6)',
-              '&:hover': { color: '#fff' },
+              '&:hover': { color: '#F8FAFC' },
             }}
           >
             <CloseIcon />
@@ -96,7 +96,7 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
 
           {/* Result Message */}
           <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', color: isWin ? '#00D395' : '#FF6B6B' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', color: isWin ? '#10B981' : '#EF4444' }}>
               {isWin ? `+${Number(trade.profitAmount || 0).toFixed(2)} USDT` : `-${Number(trade.total || 0).toFixed(2)} USDT`}
             </Typography>
             <Typography variant="caption" color="text.secondary">
@@ -111,12 +111,13 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
               variant="contained"
               onClick={onClose}
               sx={{
-                bgcolor: '#4361EE',
+                bgcolor: '#00FF9D',
+                color: '#0B0E14',
                 borderRadius: 3,
                 py: 1.5,
                 fontWeight: 'bold',
                 textTransform: 'none',
-                '&:hover': { bgcolor: '#3651d1' }
+                '&:hover': { bgcolor: '#00CC7D' }
               }}
             >
               Close
@@ -131,7 +132,7 @@ const TradeResultModal = ({ open, onClose, trade, currentPrice }) => {
                 py: 1.5,
                 fontWeight: 'bold',
                 textTransform: 'none',
-                color: '#fff',
+                color: '#F8FAFC',
                 '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
               }}
             >
