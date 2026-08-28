@@ -17,10 +17,10 @@ async function seedAdmin() {
     const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/crypto-trading';
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to MongoDB');
-    
-    const adminEmail = 'admin@IG AUS.com';
+
+    const adminEmail = 'admin@igaussie.com';
     const adminPassword = 'admin123';
-    
+
     const existingAdmin = await User.findOne({ email: adminEmail });
     if (existingAdmin) {
       existingAdmin.isVerified = true;
@@ -28,9 +28,9 @@ async function seedAdmin() {
       console.log('Admin user already exists (Updated to Verified)');
       process.exit(0);
     }
-    
+
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    
+
     const adminData = {
       email: adminEmail,
       password: hashedPassword,
@@ -38,13 +38,13 @@ async function seedAdmin() {
       role: 'admin',
       isVerified: true
     };
-    
+
     await User.create(adminData);
-    
+
     console.log('Admin user created successfully!');
     console.log(`Email: ${adminEmail}`);
     console.log(`Password: ${adminPassword}`);
-    
+
     process.exit(0);
   } catch (error) {
     console.error('Error:', error);

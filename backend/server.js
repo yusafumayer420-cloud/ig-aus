@@ -39,11 +39,11 @@ const rawAdminUrl = process.env.ADMIN_URL;
 
 // Start with hardcoded fallback origins (you can keep or remove)
 let allowedOrigins = [
-  'https://IG AUS.com',
-  'https://www.IG AUS.com',
-  'https://admin.IG AUS.com',
-  'https://www.admin.IG AUS.com',
-  'https://api.IG AUS.com'
+  'https://igaussie.com',
+  'https://www.igaussie.com',
+  'https://admin.igaussie.com',
+  'https://www.admin.igaussie.com',
+  'https://api.igaussie.com'
 ];
 
 // Helper to add an origin and optionally its www variant
