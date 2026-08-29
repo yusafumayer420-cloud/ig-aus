@@ -66,7 +66,7 @@ const RegisterPage = () => {
     const result = await register(formData.email, formData.password, formData.fullName, formData.referralCode);
     setLoading(false);
     if (result.success) {
-      setShowOtp(true);
+      setCurrentStep(2);
     }
   };
 

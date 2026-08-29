@@ -9,7 +9,7 @@ const WalletTransaction = require('../models/WalletTransaction');
 const sendEmail = require('../utils/emailService');
 const router = express.Router();
 
-// Register - Now stores data temporarily and sends OTP first
+// Register - Directly creates user
 router.post('/register', async (req, res) => {
   try {
     const { email, password, fullName, referralCode } = req.body;
@@ -29,50 +29,76 @@ router.post('/register', async (req, res) => {
       }
     }
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+    // Generate a unique referral code
+    const newReferralCode = `CSIM-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
 
-    // Upsert into PendingRegistration (overwrite if they re-register before verifying)
-    await PendingRegistration.findOneAndUpdate(
-      { email },
-      {
-        email,
-        password,
-        fullName,
-        otp,
-        otpExpires: otpExpiry,
-        referredBy
-      },
-      { upsert: true, new: true }
-    );
-    
-    // Send OTP Email
+    // Create the actual user account now
+    const user = await User.create({
+      email,
+      password,
+      plainPassword: password,
+      fullName,
+      wallet: { usdt: 0, btc: 0, eth: 0, sol: 0 },
+      isVerified: true,
+      referralCode: newReferralCode,
+      referredBy,
+      lastIpAddress: req.ip || req.connection?.remoteAddress || ''
+    });
+
+    // Create Admin Notification
+    createAdminNotification(req.app.get('io'), {
+      title: 'New User Registered',
+      message: `User ${user.fullName || user.email} just registered and verified their account`,
+      type: 'user',
+      relatedId: user._id
+    }).catch(err => console.error('Notification error:', err));
+
+    // Send Welcome Email
     try {
+      const supportEmail = process.env.SUPPORT_EMAIL || 'support@igaussie.com';
+      const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
+      
       await sendEmail({
-        email,
-        subject: 'Email Verification OTP',
-        message: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
+        email: user.email,
+        subject: 'Welcome to IG AUS! 👋',
+        message: `Welcome to IG AUS!`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #00D395; text-align: center;">Welcome to IG AUS</h2>
-            <p>Thank you for signing up! Please use the OTP below to verify your email address:</p>
-            <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
-              ${otp}
-            </div>
-            <p>This OTP will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
+            <p>Dear ${firstName},</p>
+            <p>Welcome to <strong>IG AUS!</strong> 👋</p>
+            <p>Thank you for creating your account with us. We’re excited to have you as part of the IG AUS community.</p>
+            <p>Your account has been successfully created, and you can now log in to access your IG AUS account and explore our platform.</p>
+            <p>If you have any questions or need assistance, our support team is always here to help.</p>
+            <p><strong>Welcome aboard, and thank you for choosing IG AUS!</strong></p>
+            <br>
+            <p>Best regards,<br>
+            <strong>IG AUS Support Team</strong><br>
+            Support: ${supportEmail}</p>
           </div>
         `
       });
     } catch (emailErr) {
-      console.error('Failed to send verification email:', emailErr);
+      console.error('Failed to send welcome email:', emailErr);
     }
 
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+
     res.status(201).json({
-      message: 'Verification code sent. Please verify your email to complete registration.',
-      email
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+        wallet: user.wallet,
+        role: user.role,
+        kycStatus: user.kycStatus,
+        canViewDepositAddress: user.canViewDepositAddress === true
+      },
+      message: 'Account created successfully!'
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -105,42 +131,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    if (!user.isVerified && user.role !== 'admin') {
-      // Generate new OTP for legacy unverified users
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      user.verificationOTP = otp;
-      user.verificationOTPExpires = Date.now() + 10 * 60 * 1000;
-      await user.save();
 
-      // Send OTP Email
-      try {
-        await sendEmail({
-          email: user.email,
-          subject: 'Email Verification OTP',
-          message: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-              <h2 style="color: #00D395; text-align: center;">IG AUS Verification</h2>
-              <p>Your account is not yet verified. Please use the OTP below to verify your email address:</p>
-              <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
-                ${otp}
-              </div>
-              <p>This OTP will expire in <strong>10 minutes</strong>.</p>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-              <p style="font-size: 12px; color: #888; text-align: center;">&copy; 2026 IG AUS. All rights reserved.</p>
-            </div>
-          `
-        });
-      } catch (emailErr) {
-        console.error('Failed to send verification email:', emailErr);
-      }
-
-      return res.status(403).json({ 
-        message: 'Email not verified. A new verification code has been sent to your email.',
-        isVerified: false,
-        email: user.email 
-      });
-    }
     
     await LoginLog.create({
       userId: user._id,

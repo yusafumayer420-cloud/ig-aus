@@ -225,6 +225,14 @@ export const AuthProvider = ({ children }) => {
         referralCode
       });
 
+      const { token, user } = response.data;
+      if (token && user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        socket.emit('join_user', user._id);
+      }
+
       toast.success(response.data.message || 'Registration successful!');
       return { success: true, email };
     } catch (error) {
