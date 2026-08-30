@@ -88,7 +88,6 @@ const FundsPage = () => {
   const [voucherPreview, setVoucherPreview] = useState(null);
   const [configuredDepositAddress, setConfiguredDepositAddress] = useState('');
   const [depositAddressLoading, setDepositAddressLoading] = useState(false);
-  const [showKycDialog, setShowKycDialog] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
 
   useEffect(() => {
@@ -173,10 +172,6 @@ const FundsPage = () => {
   };
 
   const handleWithdraw = async () => {
-    if (user?.kycStatus !== 'verified') {
-      setShowKycDialog(true);
-      return;
-    }
 
     if (!withdrawAmount || !withdrawAddress) {
       toast.error('Please fill all fields');
@@ -900,7 +895,7 @@ const FundsPage = () => {
                 <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
                   <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>1:</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Withdrawal processing time is 24 hours.
+                    Withdrawal processing time is 15 to 30 mins.
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
@@ -1055,68 +1050,7 @@ const FundsPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* KYC Required Dialog */}
-      <Dialog 
-        open={showKycDialog} 
-        onClose={() => setShowKycDialog(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          style: {
-            borderRadius: 16,
-            background: 'linear-gradient(135deg, #1A1F2B 0%, #10141D 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-          }
-        }}
-      >
-        <DialogTitle sx={{ textAlign: 'center', pt: 4 }}>
-          <Avatar 
-            sx={{ 
-              bgcolor: 'rgba(255, 107, 107, 0.1)', 
-              width: 60, 
-              height: 60, 
-              mx: 'auto', 
-              mb: 2 
-            }}
-          >
-            <Security sx={{ color: '#FF6B6B', fontSize: 30 }} />
-          </Avatar>
-          <Typography variant="h6" component="span" sx={{ fontWeight: 'bold', color: 'white' }}>
-            KYC Verification Required
-          </Typography>
-        </DialogTitle>
-        <DialogContent sx={{ textAlign: 'center', pb: 4 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            To ensure the security of your funds, identity verification (KYC) is mandatory before making any withdrawals.
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => {
-              setShowKycDialog(false);
-              navigate('/profile', { state: { activeTab: 2 } });
-            }}
-            sx={{ 
-              py: 1.5, 
-              borderRadius: '50px', 
-              background: 'linear-gradient(135deg, #00E5FF 0%, #00BCD4 100%)',
-              fontWeight: 'bold',
-              textTransform: 'none',
-              mb: 2
-            }}
-          >
-            Go to Verification
-          </Button>
-          <Button
-            fullWidth
-            variant="text"
-            onClick={() => setShowKycDialog(false)}
-            sx={{ color: 'text.secondary', textTransform: 'none' }}
-          >
-            Maybe Later
-          </Button>
-        </DialogContent>
-      </Dialog>
+
     </Container>
   );
 };

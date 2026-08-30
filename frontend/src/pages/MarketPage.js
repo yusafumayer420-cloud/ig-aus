@@ -73,7 +73,7 @@ const MarketPage = ({ marketData }) => {
     FXS: { color: '#000000', text: 'F' }, DYDX: { color: '#6966FF', text: 'D' },
     COMP: { color: '#00D395', text: 'C' }, CRV: { color: '#FF0000', text: 'C' },
     CHZ: { color: '#CD0124', text: 'C' }, USDT: { color: '#26A17B', text: 'T' },
-    USDC: { color: '#2775CA', text: '$' },
+    USDC: { color: '#2775CA', text: '$' }, BTS: { color: '#F7931A', text: 'B' },
   };
 
   const CoinIcon = ({ symbol, size = 32, mr = 1.5 }) => {
@@ -364,6 +364,18 @@ const MarketPage = ({ marketData }) => {
 
     if (shouldResort) {
       data.sort((a, b) => {
+        if (activeTab === 0) {
+          const isBtcA = a.pair?.startsWith('BTC/');
+          const isBtcB = b.pair?.startsWith('BTC/');
+          if (isBtcA && !isBtcB) return -1;
+          if (!isBtcA && isBtcB) return 1;
+          
+          const isEthA = a.pair?.startsWith('ETH/');
+          const isEthB = b.pair?.startsWith('ETH/');
+          if (isEthA && !isEthB) return -1;
+          if (!isEthA && isEthB) return 1;
+        }
+
         let aValue, bValue;
         if (sortBy === 'volume') {
           aValue = a.volume || 0;
@@ -392,6 +404,16 @@ const MarketPage = ({ marketData }) => {
         const indexB = orderMap.has(b.pair) ? orderMap.get(b.pair) : 999999;
         return indexA - indexB;
       });
+    }
+
+    if (activeTab === 0) {
+      const btcCoin = data.find(c => c.pair?.startsWith('BTC/'));
+      if (btcCoin) {
+        const btsCoin = { ...btcCoin, pair: 'BTS/USDT', symbol: 'BTS' };
+        data = data.filter(c => c.pair !== 'BTS/USDT');
+        const insertIndex = Math.max(0, data.length - 2);
+        data.splice(insertIndex, 0, btsCoin);
+      }
     }
 
     // Show all coins

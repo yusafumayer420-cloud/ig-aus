@@ -173,10 +173,6 @@ router.post('/withdraw', auth, async (req, res) => {
       return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
     }
     
-    // Check KYC status
-    if (user.kycStatus !== 'verified') {
-      return res.status(403).json({ message: 'KYC verification is required for withdrawals' });
-    }
 
     // Check for existing pending withdrawals
     const pendingWithdrawal = await WalletTransaction.findOne({

@@ -134,7 +134,7 @@ const WelcomePage = () => {
           style={{ textAlign: 'center', marginBottom: 24 }}
         >
           <Box sx={{ mx: 'auto', mb: 1, display: 'flex', justifyContent: 'center' }}>
-            <img src="/logo.png" alt="IG AUS Logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: '50%' }} />
+            <img src="/logo.png" alt="IG AUS Logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: '50%', boxShadow: '0 0 25px rgba(0, 140, 255, 0.6), inset 0 0 10px rgba(0, 140, 255, 0.4)' }} />
           </Box>
           <Typography sx={{ fontSize: '0.6rem', letterSpacing: 3, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', mb: 0.3 }}>
             IG AUS
