@@ -199,6 +199,12 @@ const TransactionHistoryPage = () => {
                 />
               </Box>
 
+              {selectedTx.rejectionReason && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  <strong>Rejection Reason:</strong> {selectedTx.rejectionReason}
+                </Alert>
+              )}
+
               <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', my: 1 }} />
 
               <Grid container spacing={3} alignItems="center">

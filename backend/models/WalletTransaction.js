@@ -21,9 +21,10 @@ const WalletTransactionSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'completed', 'failed', 'cancelled'],
+    enum: ['pending', 'completed', 'failed', 'cancelled', 'rejected'],
     default: 'pending'
   },
+  rejectionReason: String,
   transactionHash: String,
   fromAddress: String,
   toAddress: String,

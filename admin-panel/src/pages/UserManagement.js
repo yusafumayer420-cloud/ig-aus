@@ -3,13 +3,14 @@ import {
   Box, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Chip, Button, TextField, InputAdornment, IconButton,
   Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Grid, Avatar,
-  Badge, Tooltip, Tabs, Tab, Alert, LinearProgress, FormControlLabel, Switch
+  Badge, Tooltip, Tabs, Tab, Alert, LinearProgress, FormControlLabel, Switch,
+  FormControl, InputLabel, Select
 } from '@mui/material';
 import { io } from 'socket.io-client';
 import {
   People, SwapVert, Search, FilterList, MoreVert, PersonAdd, Edit, Delete, Block,
   CheckCircle, Cancel, Visibility, Download, Refresh, Email, Phone, AccountBalanceWallet,
-  TrendingUp, Security, ChatBubble
+  TrendingUp, Security, ChatBubble, Notifications
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -30,7 +31,11 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [viewDialog, setViewDialog] = useState(false);
+  const [statusDialog, setStatusDialog] = useState(false);
+  const [statusData, setStatusData] = useState({ status: 'active', reason: '' });
   const [editDialog, setEditDialog] = useState(false);
+  const [notificationDialog, setNotificationDialog] = useState(false);
+  const [notificationData, setNotificationData] = useState({ title: '', message: '', type: 'info' });
 
 
   // Initialize socket connection and listen for user status updates
@@ -85,6 +90,9 @@ const UserManagement = () => {
     kycStatus: '',
     deliveryTradeEnabled: true,
     canViewDepositAddress: false,
+    score: 0,
+    level: 1,
+    password: '',
     wallet: {
       usdt: 0
     }
@@ -143,10 +151,17 @@ const UserManagement = () => {
       phone: user.phone || '',
       kycStatus: user.kycStatus || 'unverified',
       deliveryTradeEnabled: user.deliveryTradeEnabled !== undefined ? user.deliveryTradeEnabled : true,
-      canViewDepositAddress: user.canViewDepositAddress === true,
+      canViewDepositAddress: user.canViewDepositAddress || false,
+      score: user.score || 0,
+      level: user.level || 1,
+      password: '',
       wallet: {
         usdt: user.wallet?.usdt || 0,
       }
+    });
+    setStatusData({
+      status: user.status || 'active',
+      reason: user.statusReason || ''
     });
   };
 
@@ -164,9 +179,29 @@ const UserManagement = () => {
     handleMenuClose();
   };
 
+  const handleOpenNotification = () => {
+    setNotificationData({ title: '', message: '', type: 'info' });
+    setNotificationDialog(true);
+    handleMenuClose();
+  };
+
+  const handleSendNotification = async () => {
+    try {
+      await api.post(`/api/admin/users/${selectedUser._id}/notify`, notificationData);
+      toast.success('Notification sent successfully');
+      setNotificationDialog(false);
+    } catch (error) {
+      toast.error('Failed to send notification');
+    }
+  };
+
   const handleUpdateUser = async () => {
     try {
-      await api.put(`/api/admin/users/${selectedUser._id}`, editData);
+      const payload = { ...editData };
+      if (!payload.password) {
+        delete payload.password;
+      }
+      await api.put(`/api/admin/users/${selectedUser._id}`, payload);
       toast.success('User updated successfully');
       setEditDialog(false);
       fetchUsers();
@@ -188,20 +223,15 @@ const UserManagement = () => {
     handleMenuClose();
   };
 
-  const handleBlockUser = async () => {
+  const handleStatusChange = async () => {
     try {
-      if (selectedUser.isBanned) {
-        await api.post(`/api/admin/users/${selectedUser._id}/unban`);
-        toast.success('User unblocked');
-      } else {
-        await api.post(`/api/admin/users/${selectedUser._id}/ban`, { reason: 'Violation of terms' });
-        toast.success('User blocked');
-      }
+      await api.put(`/api/admin/users/${selectedUser._id}/status`, statusData);
+      toast.success('User status updated');
       fetchUsers();
     } catch (error) {
       toast.error('Action failed');
     }
-    handleMenuClose();
+    setStatusDialog(false);
   };
 
   const handleVerifyKYC = async () => {
@@ -221,13 +251,13 @@ const UserManagement = () => {
   };
 
   const getStatusColor = (user) => {
-    if (user.isBanned) return 'error'; // Suspended
+    if (user.status === 'blocked') return 'error'; // Blocked
+    if (user.status === 'frozen') return 'warning'; // Frozen
     return 'success'; // Active
   };
 
   const getStatusLabel = (user) => {
-    if (user.isBanned) return 'suspended';
-    return 'active';
+    return user.status || 'active';
   };
 
   const getKYCColor = (status) => {
@@ -611,17 +641,18 @@ const UserManagement = () => {
           <Edit sx={{ mr: 2 }} />
           Edit User
         </MenuItem>
+        <MenuItem onClick={handleOpenNotification}>
+          <Notifications sx={{ mr: 2 }} />
+          Send Notification
+        </MenuItem>
 
         <MenuItem onClick={handleVerifyKYC}>
           <CheckCircle sx={{ mr: 2 }} />
           Verify KYC
         </MenuItem>
-        <MenuItem
-          onClick={handleBlockUser}
-          sx={{ color: selectedUser?.isBanned ? '#22c55e' : '#f43f5e', fontWeight: 'bold' }}
-        >
+        <MenuItem onClick={() => { setStatusDialog(true); handleMenuClose(); }}>
           <Block sx={{ mr: 2 }} />
-          {selectedUser?.isBanned ? '✓ Unsuspend Account' : '⊘ Suspend Account'}
+          Change Status
         </MenuItem>
         <MenuItem onClick={handleDeleteUser} sx={{ color: '#f43f5e' }}>
           <Delete sx={{ mr: 2 }} />
@@ -755,6 +786,30 @@ const UserManagement = () => {
               onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
             />
             <TextField
+              label="New Password"
+              fullWidth
+              type="password"
+              placeholder="Leave blank to keep unchanged"
+              value={editData.password}
+              onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+            />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Score"
+                fullWidth
+                type="number"
+                value={editData.score}
+                onChange={(e) => setEditData({ ...editData, score: Number(e.target.value) })}
+              />
+              <TextField
+                label="Level"
+                fullWidth
+                type="number"
+                value={editData.level}
+                onChange={(e) => setEditData({ ...editData, level: Number(e.target.value) })}
+              />
+            </Box>
+            <TextField
               select
               label="KYC Status"
               fullWidth
@@ -825,6 +880,84 @@ const UserManagement = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Send Notification Dialog */}
+      <Dialog
+        open={notificationDialog}
+        onClose={() => setNotificationDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Send Notification to {selectedUser?.fullName}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ pt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              label="Notification Title"
+              fullWidth
+              value={notificationData.title}
+              onChange={(e) => setNotificationData({ ...notificationData, title: e.target.value })}
+            />
+            <TextField
+              label="Message"
+              fullWidth
+              multiline
+              rows={4}
+              value={notificationData.message}
+              onChange={(e) => setNotificationData({ ...notificationData, message: e.target.value })}
+            />
+            <TextField
+              select
+              label="Notification Type"
+              fullWidth
+              value={notificationData.type}
+              onChange={(e) => setNotificationData({ ...notificationData, type: e.target.value })}
+            >
+              <MenuItem value="info">Info</MenuItem>
+              <MenuItem value="success">Success</MenuItem>
+              <MenuItem value="warning">Warning</MenuItem>
+              <MenuItem value="error">Error</MenuItem>
+            </TextField>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setNotificationDialog(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleSendNotification} disabled={!notificationData.title || !notificationData.message}>
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Change Status Dialog */}
+      <Dialog open={statusDialog} onClose={() => setStatusDialog(false)}>
+        <DialogTitle>Change User Status</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={statusData.status}
+              label="Status"
+              onChange={(e) => setStatusData({ ...statusData, status: e.target.value })}
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="frozen">Frozen</MenuItem>
+              <MenuItem value="blocked">Blocked</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            margin="dense"
+            label="Reason (Optional)"
+            fullWidth
+            multiline
+            rows={2}
+            value={statusData.reason}
+            onChange={(e) => setStatusData({ ...statusData, reason: e.target.value })}
+            sx={{ mt: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setStatusDialog(false)}>Cancel</Button>
+          <Button onClick={handleStatusChange} variant="contained" color="primary">Update Status</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

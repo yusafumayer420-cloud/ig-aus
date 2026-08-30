@@ -86,6 +86,8 @@ const TransactionManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [processDialog, setProcessDialog] = useState(false);
+  const [rejectDialog, setRejectDialog] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
   const [depositDialog, setDepositDialog] = useState(false);
   const [depositForm, setDepositForm] = useState({ userId: '', currency: 'USDT', amount: '' });
   const [users, setUsers] = useState([]);
@@ -115,6 +117,7 @@ const TransactionManagement = () => {
       if (!requestType && activeTab === 1) requestType = "deposit";
       if (!requestType && activeTab === 2) requestType = "withdrawal";
       if (!requestStatus && activeTab === 3) requestStatus = "pending";
+      if (!requestStatus && activeTab === 4) requestStatus = "rejected";
 
       const response = await api.get('/api/admin/transactions', {
         params: {
@@ -311,19 +314,31 @@ const TransactionManagement = () => {
     }
   };
 
+  const openRejectDialog = () => {
+    setRejectionReason("");
+    setRejectDialog(true);
+    handleMenuClose();
+  };
+
   const handleRejectTransaction = async () => {
     if (!selectedTransaction) return;
+    if (!rejectionReason.trim()) {
+      toast.error('Please provide a rejection reason');
+      return;
+    }
     setProcessingId(selectedTransaction._id);
     try {
-      await api.put(`/api/admin/transactions/${selectedTransaction._id}`, { status: 'failed' });
-      toast.error(`Transaction marked as failed`);
+      await api.put(`/api/admin/transactions/${selectedTransaction._id}`, { 
+        status: 'rejected',
+        rejectionReason: rejectionReason.trim()
+      });
+      toast.error(`Transaction marked as rejected`);
       fetchTransactions();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to reject transaction');
     } finally {
       setProcessingId(null);
-      handleMenuClose();
-      setProcessDialog(false);
+      setRejectDialog(false);
       setViewDialog(false);
     }
   };
@@ -755,6 +770,7 @@ const TransactionManagement = () => {
                 <MenuItem value="completed">Completed</MenuItem>
                 <MenuItem value="pending">Pending</MenuItem>
                 <MenuItem value="failed">Failed</MenuItem>
+                <MenuItem value="rejected">Rejected</MenuItem>
                 <MenuItem value="cancelled">Cancelled</MenuItem>
               </Select>
             </FormControl>
@@ -795,6 +811,7 @@ const TransactionManagement = () => {
           <Tab label="Deposits" />
           <Tab label="Withdrawals" />
           <Tab label="Pending" />
+          <Tab label="Rejected" />
         </Tabs>
       </Paper>
 
@@ -976,10 +993,11 @@ const TransactionManagement = () => {
           </MenuItem>
         )}
         {selectedTransaction?.status !== "completed" &&
-          selectedTransaction?.status !== "failed" && (
-            <MenuItem onClick={handleRejectTransaction}>
+          selectedTransaction?.status !== "failed" && 
+          selectedTransaction?.status !== "rejected" && (
+            <MenuItem onClick={openRejectDialog}>
               <Cancel sx={{ mr: 2, color: "#f43f5e" }} />
-              Mark as Failed
+              Reject Transaction
             </MenuItem>
           )}
       </Menu>
@@ -1287,31 +1305,58 @@ const TransactionManagement = () => {
                      <img src={selectedTransaction.voucher} alt="Voucher Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain', borderRadius: 4, cursor: 'pointer' }} onClick={() => window.open(selectedTransaction.voucher, '_blank')} />
                    </Box>
                 )}
+                {selectedTransaction.type === 'deposit' && (
+                  <TextField
+                    fullWidth
+                    label="Deposit Amount (USDT)"
+                    type="number"
+                    inputProps={{ min: 0, step: 0.01 }}
+                    value={depositAmountOverride}
+                    onChange={(e) => setDepositAmountOverride(e.target.value)}
+                    sx={{ mt: 2 }}
+                  />
+                )}
               </Paper>
-
-              {/* Deposit amount override field */}
-              {selectedTransaction.type === 'deposit' && (
-                <TextField
-                  fullWidth
-                  label="Deposit Amount (USDT)"
-                  type="number"
-                  inputProps={{ min: 0, step: 0.01 }}
-                  value={depositAmountOverride}
-                  onChange={(e) => setDepositAmountOverride(e.target.value)}
-                  placeholder="Enter the amount received"
-                  sx={{ mb: 1 }}
-                />
-              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setProcessDialog(false)}>Cancel</Button>
-              <Button onClick={handleRejectTransaction} color="error" variant="outlined" disabled={processingId === selectedTransaction._id}>Reject</Button>
+              <Button onClick={() => setRejectDialog(true)} color="error" variant="outlined" disabled={processingId === selectedTransaction._id}>Reject</Button>
               <Button onClick={handleApproveWithdrawal} variant="contained" color="success" disabled={processingId === selectedTransaction._id}>
                 {processingId === selectedTransaction._id ? 'Processing...' : (selectedTransaction.type === 'deposit' ? '✅ Approve & Credit' : '✅ Approve & Process')}
               </Button>
             </DialogActions>
           </>
         )}
+      </Dialog>
+
+      {/* Reject Transaction Dialog */}
+      <Dialog open={rejectDialog} onClose={() => setRejectDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Reject Transaction</DialogTitle>
+        <DialogContent>
+          <Alert severity="error" sx={{ mb: 3 }}>
+            Please provide a reason for rejecting this transaction. This reason will be shown to the user.
+          </Alert>
+          <TextField
+            fullWidth
+            label="Rejection Reason"
+            multiline
+            rows={3}
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            placeholder="E.g., Invalid wallet address, Insufficient funds, etc."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setRejectDialog(false)}>Cancel</Button>
+          <Button
+            onClick={handleRejectTransaction}
+            variant="contained"
+            color="error"
+            disabled={processingId === selectedTransaction?._id}
+          >
+            {processingId === selectedTransaction?._id ? "Processing..." : "Confirm Rejection"}
+          </Button>
+        </DialogActions>
       </Dialog>
 
       {/* Add Deposit Dialog */}

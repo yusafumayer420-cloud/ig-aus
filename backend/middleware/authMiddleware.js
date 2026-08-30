@@ -22,20 +22,21 @@ const protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     
-    // Check if user still exists and is not banned
-    const user = await User.findById(decoded.id).select('isBanned isActive role');
+    // Check if user still exists and is not blocked
+    const user = await User.findById(decoded.id).select('status isActive role');
     
     if (!user) {
       return res.status(401).json({ message: 'User no longer exists' });
     }
 
-    if (user.isBanned) {
-      return res.status(403).json({ message: 'Your account has been suspended' });
+    if (user.status === 'blocked') {
+      return res.status(403).json({ message: 'Your account has been blocked. Please contact support.' });
     }
 
     req.user = decoded;
     // Attach full user info if needed, but keeping it simple for now
     req.user.role = user.role; 
+    req.user.status = user.status;
     
     next();
   } catch (err) {

@@ -96,6 +96,7 @@ router.post('/register', async (req, res) => {
         wallet: user.wallet,
         role: user.role,
         kycStatus: user.kycStatus,
+        status: user.status,
         canViewDepositAddress: user.canViewDepositAddress === true
       },
       message: 'Account created successfully!'
@@ -124,10 +125,10 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    if (user.isBanned) {
+    if (user.status === 'blocked') {
       return res.status(403).json({ 
-        message: 'Your account has been suspended. Please contact support for more information.',
-        reason: user.banReason 
+        message: 'Your account has been blocked. Please contact support.',
+        reason: user.statusReason 
       });
     }
 
@@ -159,6 +160,7 @@ router.post('/login', async (req, res) => {
         wallet: user.wallet,
         role: user.role,
         kycStatus: user.kycStatus,
+        status: user.status,
         canViewDepositAddress: user.canViewDepositAddress === true
       }
     });
@@ -260,6 +262,7 @@ router.post('/verify-otp', async (req, res) => {
           wallet: user.wallet,
           role: user.role,
           kycStatus: user.kycStatus,
+          status: user.status,
         canViewDepositAddress: user.canViewDepositAddress === true
         },
         message: 'Email verified and account created successfully!'
@@ -334,6 +337,7 @@ router.post('/verify-otp', async (req, res) => {
         wallet: user.wallet,
         role: user.role,
         kycStatus: user.kycStatus,
+        status: user.status,
         canViewDepositAddress: user.canViewDepositAddress === true
       },
       message: 'Email verified successfully'

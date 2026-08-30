@@ -23,13 +23,14 @@ const RegisterPage = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Step 1: Account
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    phone: '',
     password: '',
+    confirmPassword: '',
     referralCode: searchParams.get('ref') || '',
     termsAccepted: false
   });
@@ -60,6 +61,10 @@ const RegisterPage = () => {
     e.preventDefault();
     if (!formData.termsAccepted) {
       toast.error('You must accept the Terms of Service');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
     setLoading(true);
@@ -230,13 +235,14 @@ const RegisterPage = () => {
                 <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>Email</Typography>
                 <TextField fullWidth type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required sx={{ mt: 0.5 }} InputProps={{ startAdornment: <InputAdornment position="start"><Email fontSize="small" /></InputAdornment> }} />
               </Box>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>Phone Number</Typography>
-                <TextField fullWidth type="tel" name="phone" placeholder="Enter your phone number" value={formData.phone} onChange={handleChange} sx={{ mt: 0.5 }} InputProps={{ startAdornment: <InputAdornment position="start"><Phone fontSize="small" /></InputAdornment> }} />
-              </Box>
+
               <Box sx={{ mb: 2 }}>
                 <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>Password</Typography>
                 <TextField fullWidth type={showPassword ? 'text' : 'password'} name="password" placeholder="Create a strong password" value={formData.password} onChange={handleChange} required sx={{ mt: 0.5 }} InputProps={{ startAdornment: <InputAdornment position="start"><Lock fontSize="small" /></InputAdornment>, endAdornment: <InputAdornment position="end"><IconButton size="small" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}</IconButton></InputAdornment> }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>Confirm Password</Typography>
+                <TextField fullWidth type={showConfirmPassword ? 'text' : 'password'} name="confirmPassword" placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} required sx={{ mt: 0.5 }} InputProps={{ startAdornment: <InputAdornment position="start"><Lock fontSize="small" /></InputAdornment>, endAdornment: <InputAdornment position="end"><IconButton size="small" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}</IconButton></InputAdornment> }} />
               </Box>
               <Box sx={{ mb: 3 }}>
                 <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>Referral Code (Optional)</Typography>

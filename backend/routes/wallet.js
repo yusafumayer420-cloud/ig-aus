@@ -35,6 +35,9 @@ router.post('/deposit/address', auth, async (req, res) => {
   try {
     const { currency } = req.body;
     const user = await User.findById(req.user.id);
+    if (user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     
     // Check if address exists
     if (user.addresses && user.addresses[currency.toLowerCase()]) {
@@ -111,6 +114,9 @@ router.get('/deposit-address', auth, async (req, res) => {
 router.post('/deposit', auth, upload.single('voucher'), async (req, res) => {
   try {
     const { currency, amount, chain } = req.body;
+    if (req.user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     
     if (!req.file) {
       return res.status(400).json({ message: 'Voucher image is required' });
@@ -163,6 +169,9 @@ router.post('/withdraw', auth, async (req, res) => {
     const { currency, amount, address, network } = req.body;
     
     const user = await User.findById(req.user.id);
+    if (user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     
     // Check KYC status
     if (user.kycStatus !== 'verified') {
@@ -264,6 +273,9 @@ router.get('/transactions', auth, async (req, res) => {
 router.post('/exchange', auth, async (req, res) => {
   try {
     const { fromCurrency, toCurrency, amount } = req.body;
+    if (req.user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     
     if (!fromCurrency || !toCurrency || !amount || amount <= 0) {
       return res.status(400).json({ message: 'Invalid exchange parameters' });

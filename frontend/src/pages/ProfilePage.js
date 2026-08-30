@@ -8,7 +8,7 @@ import {
   Language, SupportAgent, VerifiedUser, CardMembership,
   SwapHoriz, AttachMoney, AccountBalanceWallet, HelpOutline, Info,
   KeyboardArrowRight, Visibility, VisibilityOff, HeadsetMic, Logout,
-  CameraAlt, CheckCircle, Pending, Upload, ArrowForward, History, Person, Email, Phone, Close, Error
+  CameraAlt, CheckCircle, Pending, Upload, ArrowForward, History, Person, Email, Phone, Close, Error, EmojiEvents, FormatListNumbered
 } from '@mui/icons-material';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -249,6 +249,34 @@ const ProfilePage = () => {
           </Box>
         </Box>
 
+        {/* Score and Level Section */}
+        <Box sx={{ px: 3, pb: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Paper sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2, borderRadius: 4, bgcolor: 'rgba(26,29,36,0.5)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', color: '#fff' }}>
+                <Avatar sx={{ bgcolor: '#ffb300', width: 48, height: 48 }}>
+                  <EmojiEvents sx={{ color: '#fff' }} />
+                </Avatar>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: '#8b93a6', letterSpacing: 1 }}>SCORE</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800 }}>{user?.score || 0}</Typography>
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2, borderRadius: 4, bgcolor: 'rgba(26,29,36,0.5)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', color: '#fff' }}>
+                <Avatar sx={{ bgcolor: '#ff6d00', width: 48, height: 48 }}>
+                  <FormatListNumbered sx={{ color: '#fff' }} />
+                </Avatar>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: '#8b93a6', letterSpacing: 1 }}>LEVEL</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800 }}>{user?.level || 1}</Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+
         {/* Top Action Bar */}
         <Grid container sx={{ px: 2, mb: 3 }} spacing={1}>
           {[
@@ -296,6 +324,7 @@ const ProfilePage = () => {
             {[
               { icon: <Language />, label: 'Language', value: selectedLanguage.flag + ' ' + selectedLanguage.name, action: () => setShowLanguage(true) },
               { icon: <SupportAgent />, label: 'Online service', action: () => window.dispatchEvent(new Event('open-live-chat')) },
+              { icon: <VerifiedUser />, label: 'Account Status', value: (user?.status || 'active').charAt(0).toUpperCase() + (user?.status || 'active').slice(1), valueColor: user?.status === 'frozen' ? '#ff9800' : (user?.status === 'blocked' ? '#f43f5e' : '#00FF9D'), hideArrow: true },
               { icon: <VerifiedUser />, label: 'KYC Verification', value: verificationStatus === 'verified' ? 'Verified' : 'Unverified', valueColor: verificationStatus === 'verified' ? '#00FF9D' : '#8b93a6', action: () => setShowKYC(true) },
               { icon: <AccountBalanceWallet />, label: 'Personal Information', action: () => setShowEditProfile(true) },
               { icon: <HelpOutline />, label: 'FAQ', action: () => navigate('/faq') },
@@ -343,7 +372,7 @@ const ProfilePage = () => {
                     {item.value && (
                       <Typography variant="body2" sx={{ color: item.valueColor, mr: 1, fontWeight: 700 }}>{item.value}</Typography>
                     )}
-                    <KeyboardArrowRight sx={{ color: '#8b93a6', fontSize: 20, transition: 'all 0.3s' }} />
+                    {!item.hideArrow && <KeyboardArrowRight sx={{ color: '#8b93a6', fontSize: 20, transition: 'all 0.3s' }} />}
                   </ListItem>
                 </Paper>
               </motion.div>

@@ -9,12 +9,11 @@ const SystemSettings = require('../models/SystemSettings');
 
 // Delivery contract time slots (seconds → config)
 const DELIVERY_SLOTS = {
-  60:   { profit: 13, minAmount: 100 },
-  180:  { profit: 15, minAmount: 1000 },
-  300:  { profit: 20, minAmount: 3000 },
-  600:  { profit: 27, minAmount: 5000 },
-  900:  { profit: 75, minAmount: 10000 },
-  1800: { profit: 90, minAmount: 30000 },
+  60:   { profit: 30, minAmount: 0 },
+  120:  { profit: 50, minAmount: 0 },
+  180:  { profit: 60, minAmount: 0 },
+  240:  { profit: 70, minAmount: 0 },
+  300:  { profit: 80, minAmount: 0 },
 };
 
 // Settle a delivery trade after timer expires
@@ -119,6 +118,9 @@ async function settleDeliveryTrade(tradeId, io) {
 router.post('/delivery-order', auth, async (req, res) => {
   try {
     const { pair, type, deliverySeconds, price, amount } = req.body;
+    if (req.user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0 || !isFinite(amountNum)) {
       return res.status(400).json({ message: 'Invalid trade amount' });
@@ -128,13 +130,6 @@ router.post('/delivery-order', auth, async (req, res) => {
     const slotConfig = DELIVERY_SLOTS[deliverySeconds];
     if (!slotConfig) {
       return res.status(400).json({ message: 'Invalid delivery time slot' });
-    }
-
-    // Validate minimum amount
-    if (amountNum < slotConfig.minAmount) {
-      return res.status(400).json({ 
-        message: `Minimum amount for ${deliverySeconds}s is ${slotConfig.minAmount.toLocaleString()} USDT` 
-      });
     }
 
     // Atomic deduction: only subtract if balance is sufficient
@@ -232,6 +227,9 @@ router.get('/delivery-trades', auth, async (req, res) => {
 router.post('/order', auth, async (req, res) => {
   try {
     const { pair, type, orderType, price, amount, leverage = 1 } = req.body;
+    if (req.user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
 
     const total = parseFloat(price) * parseFloat(amount);
     let user;
@@ -419,6 +417,9 @@ router.post('/order/:id/cancel', auth, async (req, res) => {
 router.post('/order/:id/close', auth, async (req, res) => {
   try {
     const { price } = req.body;
+    if (req.user.status === 'frozen') {
+      return res.status(403).json({ message: 'Your account is temporarily frozen and under review.' });
+    }
     if (!price) return res.status(400).json({ message: 'Current price is required to close position' });
 
     const trade = await Trade.findById(req.params.id);

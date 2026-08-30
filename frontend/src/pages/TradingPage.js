@@ -50,12 +50,11 @@ import TradingChart from '../components/TradingChart';
 // Delivery contract time slots definition
 // ---------------------------------------------------------------------------
 const DELIVERY_SLOTS = [
-  { seconds: 60, label: '60s', profit: 13, minAmount: 100 },
-  { seconds: 180, label: '180s', profit: 15, minAmount: 1000 },
-  { seconds: 300, label: '300s', profit: 20, minAmount: 3000 },
-  { seconds: 600, label: '600s', profit: 27, minAmount: 5000 },
-  { seconds: 900, label: '900s', profit: 75, minAmount: 10000 },
-  { seconds: 1800, label: '1800s', profit: 90, minAmount: 30000 },
+  { seconds: 60, label: '60s', profit: 30, minAmount: 0 },
+  { seconds: 120, label: '120s', profit: 50, minAmount: 0 },
+  { seconds: 180, label: '180s', profit: 60, minAmount: 0 },
+  { seconds: 240, label: '240s', profit: 70, minAmount: 0 },
+  { seconds: 300, label: '300s', profit: 80, minAmount: 0 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -264,10 +263,6 @@ const DeliveryTab = ({ price, socket, user, orderBook, currentPair }) => {
     const amtNum = parseFloat(amount);
     if (!user) { toast.error('Please login to trade'); return; }
     if (!amount || isNaN(amtNum) || amtNum <= 0) { toast.error('Enter a valid amount'); return; }
-    if (amtNum < selectedSlot.minAmount) {
-      toast.error(`Minimum amount for ${selectedSlot.label} is ${selectedSlot.minAmount.toLocaleString()} USDT`);
-      return;
-    }
     if (amtNum > (user?.wallet?.usdt || 0)) {
       toast.error('Insufficient USDT balance');
       return;
@@ -350,16 +345,6 @@ const DeliveryTab = ({ price, socket, user, orderBook, currentPair }) => {
 
           {/* Amount input */}
           <Paper sx={{ p: 1.5, mb: 1, background: 'rgba(17, 24, 39, 0.4)', border: '1px solid rgba(148, 163, 184, 0.05)' }}>
-            {/* Minimum notice */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-              <Typography variant="caption" color="text.secondary">
-                Minimum {selectedSlot.minAmount.toLocaleString()}
-              </Typography>
-              <Typography variant="caption" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>USDT</Typography>
-            </Box>
-
-
-
             <TextField
               id="delivery-amount"
               name="deliveryAmount"
@@ -371,13 +356,8 @@ const DeliveryTab = ({ price, socket, user, orderBook, currentPair }) => {
               onChange={(e) => setAmount(e.target.value)}
               size="small"
               sx={{ mb: 1.5 }}
-              inputProps={{ min: selectedSlot.minAmount, step: '100' }}
-              helperText={
-                amount && parseFloat(amount) < selectedSlot.minAmount
-                  ? `Minimum for ${selectedSlot.label} is ${selectedSlot.minAmount.toLocaleString()} USDT`
-                  : `Profit: +${selectedSlot.profit}% | Timer: ${selectedSlot.label}`
-              }
-              error={!!amount && parseFloat(amount) < selectedSlot.minAmount}
+              inputProps={{ min: 0, step: '10' }}
+              helperText={`Profit: +${selectedSlot.profit}% | Timer: ${selectedSlot.label}`}
             />
 
 

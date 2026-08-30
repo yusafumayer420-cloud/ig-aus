@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider, createTheme, Alert, Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Toaster } from 'react-hot-toast';
 import io from 'socket.io-client';
@@ -187,7 +187,7 @@ function App() {
 
 function AppContent({ marketData, sidebarOpen, setSidebarOpen }) {
   const location  = useLocation();
-  const { showTradeResult } = React.useContext(AuthContext);
+  const { showTradeResult, user } = React.useContext(AuthContext);
   const isHomePage = location.pathname === '/';
   const gradientRef = useRef(null);
 
@@ -236,6 +236,14 @@ function AppContent({ marketData, sidebarOpen, setSidebarOpen }) {
           },
         }}
       />
+
+      {user?.status === 'frozen' && (
+        <Box sx={{ width: '100%', zIndex: 9999, position: 'relative' }}>
+          <Alert severity="warning" sx={{ borderRadius: 0, justifyContent: 'center' }}>
+            Your account is temporarily frozen and under review.
+          </Alert>
+        </Box>
+      )}
 
       <Routes>
         {/* Public Routes */}

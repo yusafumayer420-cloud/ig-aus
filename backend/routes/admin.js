@@ -51,7 +51,7 @@ router.get('/users', protect, adminAuth, async (req, res) => {
   try {
     const { page = 1, limit = 20, search = '', status, kycStatus } = req.query;
     
-    const query = {};
+    const query = { role: { $ne: 'admin' } };
     if (search) {
       query.$or = [
         { email: { $regex: search, $options: 'i' } },
@@ -76,8 +76,9 @@ router.get('/users', protect, adminAuth, async (req, res) => {
     }
 
     if (status) {
-      if (status === 'active') query.isBanned = false;
-      else if (status === 'suspended') query.isBanned = true;
+      if (status === 'active') query.status = 'active';
+      else if (status === 'frozen') query.status = 'frozen';
+      else if (status === 'suspended') query.status = 'blocked';
     }
 
     if (kycStatus) {
@@ -128,7 +129,12 @@ router.get('/users/:id', protect, adminAuth, async (req, res) => {
 // Update user
 router.put('/users/:id', protect, adminAuth, async (req, res) => {
   try {
-    const { fullName, phone, kycStatus, wallet, isActive, deliveryTradeEnabled, canViewDepositAddress } = req.body;
+    const userToUpdate = await User.findById(req.params.id);
+    if (userToUpdate && userToUpdate.role === 'admin') {
+      return res.status(403).json({ message: 'Cannot modify admin account' });
+    }
+
+    const { fullName, phone, kycStatus, wallet, isActive, deliveryTradeEnabled, canViewDepositAddress, score, level, password } = req.body;
     
     const updateFields = {};
     if (fullName !== undefined) updateFields.fullName = fullName;
@@ -137,6 +143,13 @@ router.put('/users/:id', protect, adminAuth, async (req, res) => {
     if (isActive !== undefined) updateFields.isActive = isActive;
     if (deliveryTradeEnabled !== undefined) updateFields.deliveryTradeEnabled = deliveryTradeEnabled;
     if (canViewDepositAddress !== undefined) updateFields.canViewDepositAddress = canViewDepositAddress;
+    if (score !== undefined) updateFields.score = score;
+    if (level !== undefined) updateFields.level = level;
+
+    if (password) {
+      const bcrypt = require('bcryptjs');
+      updateFields.password = await bcrypt.hash(password, 10);
+    }
 
     if (wallet !== undefined) {
       if (wallet.usdt !== undefined) updateFields['wallet.usdt'] = wallet.usdt;
@@ -171,6 +184,29 @@ router.put('/users/:id', protect, adminAuth, async (req, res) => {
   }
 });
 
+// Send custom notification to user
+router.post('/users/:id/notify', protect, adminAuth, async (req, res) => {
+  try {
+    const { title, message, type } = req.body;
+    
+    if (!title || !message) {
+      return res.status(400).json({ message: 'Title and message are required' });
+    }
+
+    const io = req.app.get('io');
+    if (io) {
+      io.to(`user_${req.params.id}`).emit('custom_notification', {
+        title,
+        message,
+        type: type || 'info'
+      });
+    }
+
+    res.json({ message: 'Notification sent successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Get all trades
 router.get('/trades', protect, adminAuth, async (req, res) => {
@@ -309,7 +345,7 @@ router.get('/transactions', protect, adminAuth, async (req, res) => {
 // Update transaction status
 router.put('/transactions/:id', protect, adminAuth, async (req, res) => {
   try {
-    const { status, walletAddress, amount } = req.body;
+    const { status, walletAddress, amount, rejectionReason } = req.body;
     
     const transaction = await WalletTransaction.findById(req.params.id);
     if (!transaction) {
@@ -330,6 +366,9 @@ router.put('/transactions/:id', protect, adminAuth, async (req, res) => {
       transaction.status = status;
       if (status === 'completed') {
         transaction.completedAt = new Date();
+      }
+      if (status === 'rejected' && rejectionReason) {
+        transaction.rejectionReason = rejectionReason;
       }
     }
 
@@ -696,36 +735,27 @@ router.get('/chat/messages', protect, adminAuth, async (req, res) => {
   }
 });
 
-// Ban/Unban user
-router.post('/users/:id/ban', protect, adminAuth, async (req, res) => {
+// Update User Status
+router.put('/users/:id/status', protect, adminAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    const { status, statusReason } = req.body;
+    if (!['active', 'frozen', 'blocked'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
     }
-    
-    user.isBanned = true;
-    user.banReason = req.body.reason || 'Violation of terms';
-    await user.save();
-    
-    res.json({ message: 'User banned successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
-router.post('/users/:id/unban', protect, adminAuth, async (req, res) => {
-  try {
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    if (user.role === 'admin') {
+      return res.status(403).json({ message: 'Cannot modify admin account status' });
+    }
     
-    user.isBanned = false;
-    user.banReason = '';
+    user.status = status;
+    user.statusReason = statusReason || '';
     await user.save();
     
-    res.json({ message: 'User unbanned successfully' });
+    res.json({ message: `User status updated to ${status}` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

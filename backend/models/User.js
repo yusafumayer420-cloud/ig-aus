@@ -90,15 +90,24 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  score: {
+    type: Number,
+    default: 0
+  },
+  level: {
+    type: Number,
+    default: 1
+  },
   isActive: {
     type: Boolean,
     default: true
   },
-  isBanned: {
-    type: Boolean,
-    default: false
+  status: {
+    type: String,
+    enum: ['active', 'frozen', 'blocked'],
+    default: 'active'
   },
-  banReason: String,
+  statusReason: String,
   deliveryTradeEnabled: {
     type: Boolean,
     default: true

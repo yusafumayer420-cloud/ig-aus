@@ -162,6 +162,7 @@ export const AuthProvider = ({ children }) => {
 
     socket.on('order_placed', handleNotification);
     socket.on('transaction_requested', handleNotification);
+    socket.on('custom_notification', handleNotification);
     socket.on('new_chat_message', (data) => {
       if (data.sender === 'admin' || data.senderRole === 'admin') {
         handleNotification({
@@ -180,6 +181,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       socket.off('order_placed', handleNotification);
       socket.off('transaction_requested', handleNotification);
+      socket.off('custom_notification', handleNotification);
       socket.off('new_chat_message');
       socket.off('balance_updated', handleBalanceUpdate);
       socket.off('transaction_updated', handleTransactionUpdate);

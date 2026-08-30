@@ -61,12 +61,11 @@ const TopBar = ({ onMenuClick }) => {
     handleClose();
   };
 
-  const getKYCColor = (status) => {
+  const getStatusColor = (status) => {
     switch(status) {
-      case 'verified': return 'success';
-      case 'pending': return 'warning';
-      case 'rejected': return 'error';
-      case 'unverified': return 'info';
+      case 'active': return 'success';
+      case 'frozen': return 'warning';
+      case 'blocked': return 'error';
       default: return 'default';
     }
   };
@@ -244,10 +243,10 @@ const TopBar = ({ onMenuClick }) => {
           </Typography>
           <Box sx={{ mt: 1 }}>
             <Chip
-              label={`KYC: ${user?.kycStatus || 'unverified'}`}
+              label={`Account: ${user?.status || 'active'}`}
               size="small"
-              color={getKYCColor(user?.kycStatus)}
-              sx={{ fontSize: '0.65rem', height: 22 }}
+              color={getStatusColor(user?.status || 'active')}
+              sx={{ fontSize: '0.65rem', height: 22, textTransform: 'capitalize' }}
             />
           </Box>
         </Box>

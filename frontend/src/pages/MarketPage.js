@@ -430,28 +430,7 @@ const MarketPage = ({ marketData }) => {
       </Typography>
 
 
-      {/* Search Bar */}
-      <TextField
-        fullWidth
-        placeholder="Search pairs..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-          endAdornment: searchTerm && (
-            <InputAdornment position="end">
-              <IconButton size="small" onClick={() => setSearchTerm('')}>
-                ×
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+
 
       {/* Category Chips */}
       {activeTab === 0 && (
