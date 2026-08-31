@@ -93,6 +93,8 @@ const UserManagement = () => {
     score: 0,
     level: 1,
     password: '',
+    usdtAddition: 0,
+    usdtSubtraction: 0,
     wallet: {
       usdt: 0
     }
@@ -155,6 +157,8 @@ const UserManagement = () => {
       score: user.score || 0,
       level: user.level || 1,
       password: '',
+      usdtAddition: 0,
+      usdtSubtraction: 0,
       wallet: {
         usdt: user.wallet?.usdt || 0,
       }
@@ -198,6 +202,19 @@ const UserManagement = () => {
   const handleUpdateUser = async () => {
     try {
       const payload = { ...editData };
+      
+      const currentUsdt = selectedUser.wallet?.usdt || 0;
+      const addition = Number(payload.usdtAddition) || 0;
+      const subtraction = Number(payload.usdtSubtraction) || 0;
+      
+      payload.wallet = { 
+        ...payload.wallet, 
+        usdt: currentUsdt + addition - subtraction
+      };
+      
+      delete payload.usdtAddition;
+      delete payload.usdtSubtraction;
+
       if (!payload.password) {
         delete payload.password;
       }
@@ -858,17 +875,34 @@ const UserManagement = () => {
               }
             />
             
-              <Grid item xs={12}>
-                <TextField
-                  label="USDT Balance"
-                  type="number"
-                  fullWidth
-                  value={editData.wallet.usdt}
-                  onChange={(e) => setEditData({
-                    ...editData,
-                    wallet: { ...editData.wallet, usdt: parseFloat(e.target.value) || 0 }
-                  })}
-                />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="USDT Addition"
+                    type="number"
+                    fullWidth
+                    value={editData.usdtAddition === 0 ? '' : editData.usdtAddition}
+                    onChange={(e) => setEditData({ ...editData, usdtAddition: e.target.value ? parseFloat(e.target.value) : 0 })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="USDT Subtraction"
+                    type="number"
+                    fullWidth
+                    value={editData.usdtSubtraction === 0 ? '' : editData.usdtSubtraction}
+                    onChange={(e) => setEditData({ ...editData, usdtSubtraction: e.target.value ? parseFloat(e.target.value) : 0 })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="Total USDT Balance"
+                    type="number"
+                    fullWidth
+                    disabled
+                    value={((selectedUser?.wallet?.usdt || 0) + (parseFloat(editData.usdtAddition) || 0) - (parseFloat(editData.usdtSubtraction) || 0))}
+                  />
+                </Grid>
               </Grid>
           </Box>
         </DialogContent>
