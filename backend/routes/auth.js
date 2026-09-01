@@ -97,7 +97,9 @@ router.post('/register', async (req, res) => {
         role: user.role,
         kycStatus: user.kycStatus,
         status: user.status,
-        canViewDepositAddress: user.canViewDepositAddress === true
+        canViewDepositAddress: user.canViewDepositAddress === true,
+        score: user.score,
+        level: user.level
       },
       message: 'Account created successfully!'
     });
@@ -161,7 +163,9 @@ router.post('/login', async (req, res) => {
         role: user.role,
         kycStatus: user.kycStatus,
         status: user.status,
-        canViewDepositAddress: user.canViewDepositAddress === true
+        canViewDepositAddress: user.canViewDepositAddress === true,
+        score: user.score,
+        level: user.level
       }
     });
   } catch (error) {
@@ -263,7 +267,9 @@ router.post('/verify-otp', async (req, res) => {
           role: user.role,
           kycStatus: user.kycStatus,
           status: user.status,
-        canViewDepositAddress: user.canViewDepositAddress === true
+          canViewDepositAddress: user.canViewDepositAddress === true,
+          score: user.score,
+          level: user.level
         },
         message: 'Email verified and account created successfully!'
       });
@@ -338,7 +344,9 @@ router.post('/verify-otp', async (req, res) => {
         role: user.role,
         kycStatus: user.kycStatus,
         status: user.status,
-        canViewDepositAddress: user.canViewDepositAddress === true
+        canViewDepositAddress: user.canViewDepositAddress === true,
+        score: user.score,
+        level: user.level
       },
       message: 'Email verified successfully'
     });
