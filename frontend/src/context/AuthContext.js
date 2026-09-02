@@ -40,12 +40,24 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem('pendingResultPrice') || null;
   });
   const [currentBtcPrice, setCurrentBtcPrice] = useState(70000); 
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(() => {
+    try {
+      const saved = localStorage.getItem('notifications');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
 
   useEffect(() => {
     priceRef.current = currentBtcPrice;
   }, [currentBtcPrice]);
+
+  // Persist notifications to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+  }, [notifications]);
 
 
   const refreshUser = async () => {
@@ -300,6 +312,7 @@ export const AuthProvider = ({ children }) => {
 
   const clearAll = () => {
     setNotifications([]);
+    localStorage.removeItem('notifications');
   };
 
   return (
